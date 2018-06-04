@@ -25,7 +25,8 @@ This source contains unreleased features, with some bugs created, removed, or wo
 * * All dialog boxes should be stored here
 
 <br />
-## Future of the editor
+
+## Future of the editor 
 I won't be able to resume the planned work, hence the release. It took a long time and great effort to put this together, and hopefully it will live for a long time (just like Starcraft). If you find a bug, create issue here (or make a post on the forums) and it will be fixed in the future (not in a matter of minutes like it used to be). 
 
 The official update server should be up for a few more months, but will most likely end for the sake of *org* TLD (There's a plan to take it back), the infamous calculator could be integrated directly into this.
