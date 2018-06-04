@@ -1,0 +1,1006 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A1394D9F-95BC-4D1B-BEA3-6DB07A96AED1}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StarcraftEPDTriggers</RootNamespace>
+    <AssemblyName>StarcraftEPDTriggers</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ovalreflectT.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>StarcraftEPDTriggers.App</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Costura, Version=1.6.2.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Costura.Fody.1.6.2\lib\dotnet\Costura.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="src\data\StarcraftDefaultMemory.cs" />
+    <Compile Include="src\parser\MyBetterReader.cs" />
+    <Compile Include="src\wnd\wndAbout.xaml.cs">
+      <DependentUpon>wndAbout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wnd\WndAddCondAct.xaml.cs">
+      <DependentUpon>WndAddCondAct.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\data\Action.cs" />
+    <Compile Include="src\data\AsyncWorker.cs" />
+    <Compile Include="src\data\Condition.cs" />
+    <Compile Include="src\data\EPDAction.cs" />
+    <Compile Include="src\data\TriggerCollection.cs" />
+    <Compile Include="src\parser\Parser.cs" />
+    <Compile Include="src\parser\Scanner.cs" />
+    <Compile Include="src\parser\Token.cs" />
+    <Compile Include="src\data\Trigger.cs" />
+    <Compile Include="src\parser\TriggerContents.cs" />
+    <Compile Include="src\ui\MyIconGridPanel.xaml.cs">
+      <DependentUpon>MyIconGridPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\ui\MySelectableList.cs" />
+    <Compile Include="src\wnd\WndAdvancedUnitProperties.xaml.cs">
+      <DependentUpon>WndAdvancedUnitProperties.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wnd\WndError.xaml.cs">
+      <DependentUpon>WndError.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wnd\WndModify.xaml.cs">
+      <DependentUpon>WndModify.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wnd\WndPlayerQuant.xaml.cs">
+      <DependentUpon>WndPlayerQuant.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wnd\WndStringPropertyEdit.xaml.cs">
+      <DependentUpon>WndStringPropertyEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wnd\WndUnitProperties.xaml.cs">
+      <DependentUpon>WndUnitProperties.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wnd\WndUpdate.xaml.cs">
+      <DependentUpon>WndUpdate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\wnd\WndWeaponTargetFlags.xaml.cs">
+      <DependentUpon>WndWeaponTargetFlags.xaml</DependentUpon>
+    </Compile>
+    <Page Include="src\wnd\wndAbout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wnd\WndAddCondAct.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="src\ui\MyIconGridPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wnd\WndAdvancedUnitProperties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wnd\WndError.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wnd\WndModify.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wnd\WndPlayerQuant.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wnd\WndStringPropertyEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wnd\WndUnitProperties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wnd\WndUpdate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\wnd\WndWeaponTargetFlags.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TriggerMaster.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ovalreflectT.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\photo_200x200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="img\flingy\flingy_0.png" />
+    <EmbeddedResource Include="img\flingy\flingy_1.png" />
+    <EmbeddedResource Include="img\flingy\flingy_10.png" />
+    <EmbeddedResource Include="img\flingy\flingy_100.png" />
+    <EmbeddedResource Include="img\flingy\flingy_101.png" />
+    <EmbeddedResource Include="img\flingy\flingy_102.png" />
+    <EmbeddedResource Include="img\flingy\flingy_103.png" />
+    <EmbeddedResource Include="img\flingy\flingy_104.png" />
+    <EmbeddedResource Include="img\flingy\flingy_105.png" />
+    <EmbeddedResource Include="img\flingy\flingy_106.png" />
+    <EmbeddedResource Include="img\flingy\flingy_107.png" />
+    <EmbeddedResource Include="img\flingy\flingy_108.png" />
+    <EmbeddedResource Include="img\flingy\flingy_109.png" />
+    <EmbeddedResource Include="img\flingy\flingy_11.png" />
+    <EmbeddedResource Include="img\flingy\flingy_110.png" />
+    <EmbeddedResource Include="img\flingy\flingy_111.png" />
+    <EmbeddedResource Include="img\flingy\flingy_112.png" />
+    <EmbeddedResource Include="img\flingy\flingy_113.png" />
+    <EmbeddedResource Include="img\flingy\flingy_114.png" />
+    <EmbeddedResource Include="img\flingy\flingy_115.png" />
+    <EmbeddedResource Include="img\flingy\flingy_116.png" />
+    <EmbeddedResource Include="img\flingy\flingy_117.png" />
+    <EmbeddedResource Include="img\flingy\flingy_118.png" />
+    <EmbeddedResource Include="img\flingy\flingy_119.png" />
+    <EmbeddedResource Include="img\flingy\flingy_12.png" />
+    <EmbeddedResource Include="img\flingy\flingy_120.png" />
+    <EmbeddedResource Include="img\flingy\flingy_121.png" />
+    <EmbeddedResource Include="img\flingy\flingy_122.png" />
+    <EmbeddedResource Include="img\flingy\flingy_123.png" />
+    <EmbeddedResource Include="img\flingy\flingy_124.png" />
+    <EmbeddedResource Include="img\flingy\flingy_125.png" />
+    <EmbeddedResource Include="img\flingy\flingy_126.png" />
+    <EmbeddedResource Include="img\flingy\flingy_127.png" />
+    <EmbeddedResource Include="img\flingy\flingy_128.png" />
+    <EmbeddedResource Include="img\flingy\flingy_129.png" />
+    <EmbeddedResource Include="img\flingy\flingy_13.png" />
+    <EmbeddedResource Include="img\flingy\flingy_130.png" />
+    <EmbeddedResource Include="img\flingy\flingy_131.png" />
+    <EmbeddedResource Include="img\flingy\flingy_132.png" />
+    <EmbeddedResource Include="img\flingy\flingy_133.png" />
+    <EmbeddedResource Include="img\flingy\flingy_134.png" />
+    <EmbeddedResource Include="img\flingy\flingy_135.png" />
+    <EmbeddedResource Include="img\flingy\flingy_136.png" />
+    <EmbeddedResource Include="img\flingy\flingy_137.png" />
+    <EmbeddedResource Include="img\flingy\flingy_138.png" />
+    <EmbeddedResource Include="img\flingy\flingy_139.png" />
+    <EmbeddedResource Include="img\flingy\flingy_14.png" />
+    <EmbeddedResource Include="img\flingy\flingy_140.png" />
+    <EmbeddedResource Include="img\flingy\flingy_141.png" />
+    <EmbeddedResource Include="img\flingy\flingy_142.png" />
+    <EmbeddedResource Include="img\flingy\flingy_143.png" />
+    <EmbeddedResource Include="img\flingy\flingy_144.png" />
+    <EmbeddedResource Include="img\flingy\flingy_145.png" />
+    <EmbeddedResource Include="img\flingy\flingy_146.png" />
+    <EmbeddedResource Include="img\flingy\flingy_147.png" />
+    <EmbeddedResource Include="img\flingy\flingy_148.png" />
+    <EmbeddedResource Include="img\flingy\flingy_149.png" />
+    <EmbeddedResource Include="img\flingy\flingy_15.png" />
+    <EmbeddedResource Include="img\flingy\flingy_150.png" />
+    <EmbeddedResource Include="img\flingy\flingy_151.png" />
+    <EmbeddedResource Include="img\flingy\flingy_152.png" />
+    <EmbeddedResource Include="img\flingy\flingy_153.png" />
+    <EmbeddedResource Include="img\flingy\flingy_154.png" />
+    <EmbeddedResource Include="img\flingy\flingy_155.png" />
+    <EmbeddedResource Include="img\flingy\flingy_156.png" />
+    <EmbeddedResource Include="img\flingy\flingy_157.png" />
+    <EmbeddedResource Include="img\flingy\flingy_158.png" />
+    <EmbeddedResource Include="img\flingy\flingy_159.png" />
+    <EmbeddedResource Include="img\flingy\flingy_16.png" />
+    <EmbeddedResource Include="img\flingy\flingy_160.png" />
+    <EmbeddedResource Include="img\flingy\flingy_161.png" />
+    <EmbeddedResource Include="img\flingy\flingy_162.png" />
+    <EmbeddedResource Include="img\flingy\flingy_163.png" />
+    <EmbeddedResource Include="img\flingy\flingy_164.png" />
+    <EmbeddedResource Include="img\flingy\flingy_165.png" />
+    <EmbeddedResource Include="img\flingy\flingy_166.png" />
+    <EmbeddedResource Include="img\flingy\flingy_167.png" />
+    <EmbeddedResource Include="img\flingy\flingy_168.png" />
+    <EmbeddedResource Include="img\flingy\flingy_169.png" />
+    <EmbeddedResource Include="img\flingy\flingy_17.png" />
+    <EmbeddedResource Include="img\flingy\flingy_170.png" />
+    <EmbeddedResource Include="img\flingy\flingy_171.png" />
+    <EmbeddedResource Include="img\flingy\flingy_172.png" />
+    <EmbeddedResource Include="img\flingy\flingy_173.png" />
+    <EmbeddedResource Include="img\flingy\flingy_174.png" />
+    <EmbeddedResource Include="img\flingy\flingy_175.png" />
+    <EmbeddedResource Include="img\flingy\flingy_176.png" />
+    <EmbeddedResource Include="img\flingy\flingy_177.png" />
+    <EmbeddedResource Include="img\flingy\flingy_178.png" />
+    <EmbeddedResource Include="img\flingy\flingy_179.png" />
+    <EmbeddedResource Include="img\flingy\flingy_18.png" />
+    <EmbeddedResource Include="img\flingy\flingy_180.png" />
+    <EmbeddedResource Include="img\flingy\flingy_181.png" />
+    <EmbeddedResource Include="img\flingy\flingy_182.png" />
+    <EmbeddedResource Include="img\flingy\flingy_183.png" />
+    <EmbeddedResource Include="img\flingy\flingy_184.png" />
+    <EmbeddedResource Include="img\flingy\flingy_185.png" />
+    <EmbeddedResource Include="img\flingy\flingy_186.png" />
+    <EmbeddedResource Include="img\flingy\flingy_187.png" />
+    <EmbeddedResource Include="img\flingy\flingy_188.png" />
+    <EmbeddedResource Include="img\flingy\flingy_189.png" />
+    <EmbeddedResource Include="img\flingy\flingy_19.png" />
+    <EmbeddedResource Include="img\flingy\flingy_190.png" />
+    <EmbeddedResource Include="img\flingy\flingy_191.png" />
+    <EmbeddedResource Include="img\flingy\flingy_192.png" />
+    <EmbeddedResource Include="img\flingy\flingy_193.png" />
+    <EmbeddedResource Include="img\flingy\flingy_194.png" />
+    <EmbeddedResource Include="img\flingy\flingy_195.png" />
+    <EmbeddedResource Include="img\flingy\flingy_196.png" />
+    <EmbeddedResource Include="img\flingy\flingy_197.png" />
+    <EmbeddedResource Include="img\flingy\flingy_198.png" />
+    <EmbeddedResource Include="img\flingy\flingy_199.png" />
+    <EmbeddedResource Include="img\flingy\flingy_2.png" />
+    <EmbeddedResource Include="img\flingy\flingy_20.png" />
+    <EmbeddedResource Include="img\flingy\flingy_200.png" />
+    <EmbeddedResource Include="img\flingy\flingy_201.png" />
+    <EmbeddedResource Include="img\flingy\flingy_202.png" />
+    <EmbeddedResource Include="img\flingy\flingy_203.png" />
+    <EmbeddedResource Include="img\flingy\flingy_204.png" />
+    <EmbeddedResource Include="img\flingy\flingy_205.png" />
+    <EmbeddedResource Include="img\flingy\flingy_206.png" />
+    <EmbeddedResource Include="img\flingy\flingy_207.png" />
+    <EmbeddedResource Include="img\flingy\flingy_208.png" />
+    <EmbeddedResource Include="img\flingy\flingy_21.png" />
+    <EmbeddedResource Include="img\flingy\flingy_22.png" />
+    <EmbeddedResource Include="img\flingy\flingy_23.png" />
+    <EmbeddedResource Include="img\flingy\flingy_24.png" />
+    <EmbeddedResource Include="img\flingy\flingy_25.png" />
+    <EmbeddedResource Include="img\flingy\flingy_26.png" />
+    <EmbeddedResource Include="img\flingy\flingy_27.png" />
+    <EmbeddedResource Include="img\flingy\flingy_28.png" />
+    <EmbeddedResource Include="img\flingy\flingy_29.png" />
+    <EmbeddedResource Include="img\flingy\flingy_3.png" />
+    <EmbeddedResource Include="img\flingy\flingy_30.png" />
+    <EmbeddedResource Include="img\flingy\flingy_31.png" />
+    <EmbeddedResource Include="img\flingy\flingy_32.png" />
+    <EmbeddedResource Include="img\flingy\flingy_33.png" />
+    <EmbeddedResource Include="img\flingy\flingy_34.png" />
+    <EmbeddedResource Include="img\flingy\flingy_35.png" />
+    <EmbeddedResource Include="img\flingy\flingy_36.png" />
+    <EmbeddedResource Include="img\flingy\flingy_37.png" />
+    <EmbeddedResource Include="img\flingy\flingy_38.png" />
+    <EmbeddedResource Include="img\flingy\flingy_39.png" />
+    <EmbeddedResource Include="img\flingy\flingy_4.png" />
+    <EmbeddedResource Include="img\flingy\flingy_40.png" />
+    <EmbeddedResource Include="img\flingy\flingy_41.png" />
+    <EmbeddedResource Include="img\flingy\flingy_42.png" />
+    <EmbeddedResource Include="img\flingy\flingy_43.png" />
+    <EmbeddedResource Include="img\flingy\flingy_44.png" />
+    <EmbeddedResource Include="img\flingy\flingy_45.png" />
+    <EmbeddedResource Include="img\flingy\flingy_46.png" />
+    <EmbeddedResource Include="img\flingy\flingy_47.png" />
+    <EmbeddedResource Include="img\flingy\flingy_48.png" />
+    <EmbeddedResource Include="img\flingy\flingy_49.png" />
+    <EmbeddedResource Include="img\flingy\flingy_5.png" />
+    <EmbeddedResource Include="img\flingy\flingy_50.png" />
+    <EmbeddedResource Include="img\flingy\flingy_51.png" />
+    <EmbeddedResource Include="img\flingy\flingy_52.png" />
+    <EmbeddedResource Include="img\flingy\flingy_53.png" />
+    <EmbeddedResource Include="img\flingy\flingy_54.png" />
+    <EmbeddedResource Include="img\flingy\flingy_55.png" />
+    <EmbeddedResource Include="img\flingy\flingy_56.png" />
+    <EmbeddedResource Include="img\flingy\flingy_57.png" />
+    <EmbeddedResource Include="img\flingy\flingy_58.png" />
+    <EmbeddedResource Include="img\flingy\flingy_59.png" />
+    <EmbeddedResource Include="img\flingy\flingy_6.png" />
+    <EmbeddedResource Include="img\flingy\flingy_60.png" />
+    <EmbeddedResource Include="img\flingy\flingy_61.png" />
+    <EmbeddedResource Include="img\flingy\flingy_62.png" />
+    <EmbeddedResource Include="img\flingy\flingy_63.png" />
+    <EmbeddedResource Include="img\flingy\flingy_64.png" />
+    <EmbeddedResource Include="img\flingy\flingy_65.png" />
+    <EmbeddedResource Include="img\flingy\flingy_66.png" />
+    <EmbeddedResource Include="img\flingy\flingy_67.png" />
+    <EmbeddedResource Include="img\flingy\flingy_68.png" />
+    <EmbeddedResource Include="img\flingy\flingy_69.png" />
+    <EmbeddedResource Include="img\flingy\flingy_7.png" />
+    <EmbeddedResource Include="img\flingy\flingy_70.png" />
+    <EmbeddedResource Include="img\flingy\flingy_71.png" />
+    <EmbeddedResource Include="img\flingy\flingy_72.png" />
+    <EmbeddedResource Include="img\flingy\flingy_73.png" />
+    <EmbeddedResource Include="img\flingy\flingy_74.png" />
+    <EmbeddedResource Include="img\flingy\flingy_75.png" />
+    <EmbeddedResource Include="img\flingy\flingy_76.png" />
+    <EmbeddedResource Include="img\flingy\flingy_77.png" />
+    <EmbeddedResource Include="img\flingy\flingy_78.png" />
+    <EmbeddedResource Include="img\flingy\flingy_79.png" />
+    <EmbeddedResource Include="img\flingy\flingy_8.png" />
+    <EmbeddedResource Include="img\flingy\flingy_80.png" />
+    <EmbeddedResource Include="img\flingy\flingy_81.png" />
+    <EmbeddedResource Include="img\flingy\flingy_82.png" />
+    <EmbeddedResource Include="img\flingy\flingy_83.png" />
+    <EmbeddedResource Include="img\flingy\flingy_84.png" />
+    <EmbeddedResource Include="img\flingy\flingy_85.png" />
+    <EmbeddedResource Include="img\flingy\flingy_86.png" />
+    <EmbeddedResource Include="img\flingy\flingy_87.png" />
+    <EmbeddedResource Include="img\flingy\flingy_88.png" />
+    <EmbeddedResource Include="img\flingy\flingy_89.png" />
+    <EmbeddedResource Include="img\flingy\flingy_9.png" />
+    <EmbeddedResource Include="img\flingy\flingy_90.png" />
+    <EmbeddedResource Include="img\flingy\flingy_91.png" />
+    <EmbeddedResource Include="img\flingy\flingy_92.png" />
+    <EmbeddedResource Include="img\flingy\flingy_93.png" />
+    <EmbeddedResource Include="img\flingy\flingy_94.png" />
+    <EmbeddedResource Include="img\flingy\flingy_95.png" />
+    <EmbeddedResource Include="img\flingy\flingy_96.png" />
+    <EmbeddedResource Include="img\flingy\flingy_97.png" />
+    <EmbeddedResource Include="img\flingy\flingy_98.png" />
+    <EmbeddedResource Include="img\flingy\flingy_99.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="img\icons\icon_0.png" />
+    <EmbeddedResource Include="img\icons\icon_1.png" />
+    <EmbeddedResource Include="img\icons\icon_10.png" />
+    <EmbeddedResource Include="img\icons\icon_100.png" />
+    <EmbeddedResource Include="img\icons\icon_101.png" />
+    <EmbeddedResource Include="img\icons\icon_102.png" />
+    <EmbeddedResource Include="img\icons\icon_103.png" />
+    <EmbeddedResource Include="img\icons\icon_104.png" />
+    <EmbeddedResource Include="img\icons\icon_105.png" />
+    <EmbeddedResource Include="img\icons\icon_106.png" />
+    <EmbeddedResource Include="img\icons\icon_107.png" />
+    <EmbeddedResource Include="img\icons\icon_108.png" />
+    <EmbeddedResource Include="img\icons\icon_109.png" />
+    <EmbeddedResource Include="img\icons\icon_11.png" />
+    <EmbeddedResource Include="img\icons\icon_110.png" />
+    <EmbeddedResource Include="img\icons\icon_111.png" />
+    <EmbeddedResource Include="img\icons\icon_112.png" />
+    <EmbeddedResource Include="img\icons\icon_113.png" />
+    <EmbeddedResource Include="img\icons\icon_114.png" />
+    <EmbeddedResource Include="img\icons\icon_115.png" />
+    <EmbeddedResource Include="img\icons\icon_116.png" />
+    <EmbeddedResource Include="img\icons\icon_117.png" />
+    <EmbeddedResource Include="img\icons\icon_118.png" />
+    <EmbeddedResource Include="img\icons\icon_119.png" />
+    <EmbeddedResource Include="img\icons\icon_12.png" />
+    <EmbeddedResource Include="img\icons\icon_120.png" />
+    <EmbeddedResource Include="img\icons\icon_121.png" />
+    <EmbeddedResource Include="img\icons\icon_122.png" />
+    <EmbeddedResource Include="img\icons\icon_123.png" />
+    <EmbeddedResource Include="img\icons\icon_124.png" />
+    <EmbeddedResource Include="img\icons\icon_125.png" />
+    <EmbeddedResource Include="img\icons\icon_126.png" />
+    <EmbeddedResource Include="img\icons\icon_127.png" />
+    <EmbeddedResource Include="img\icons\icon_128.png" />
+    <EmbeddedResource Include="img\icons\icon_129.png" />
+    <EmbeddedResource Include="img\icons\icon_13.png" />
+    <EmbeddedResource Include="img\icons\icon_130.png" />
+    <EmbeddedResource Include="img\icons\icon_131.png" />
+    <EmbeddedResource Include="img\icons\icon_132.png" />
+    <EmbeddedResource Include="img\icons\icon_133.png" />
+    <EmbeddedResource Include="img\icons\icon_134.png" />
+    <EmbeddedResource Include="img\icons\icon_135.png" />
+    <EmbeddedResource Include="img\icons\icon_136.png" />
+    <EmbeddedResource Include="img\icons\icon_137.png" />
+    <EmbeddedResource Include="img\icons\icon_138.png" />
+    <EmbeddedResource Include="img\icons\icon_139.png" />
+    <EmbeddedResource Include="img\icons\icon_14.png" />
+    <EmbeddedResource Include="img\icons\icon_140.png" />
+    <EmbeddedResource Include="img\icons\icon_141.png" />
+    <EmbeddedResource Include="img\icons\icon_142.png" />
+    <EmbeddedResource Include="img\icons\icon_143.png" />
+    <EmbeddedResource Include="img\icons\icon_144.png" />
+    <EmbeddedResource Include="img\icons\icon_145.png" />
+    <EmbeddedResource Include="img\icons\icon_146.png" />
+    <EmbeddedResource Include="img\icons\icon_147.png" />
+    <EmbeddedResource Include="img\icons\icon_148.png" />
+    <EmbeddedResource Include="img\icons\icon_149.png" />
+    <EmbeddedResource Include="img\icons\icon_15.png" />
+    <EmbeddedResource Include="img\icons\icon_150.png" />
+    <EmbeddedResource Include="img\icons\icon_151.png" />
+    <EmbeddedResource Include="img\icons\icon_152.png" />
+    <EmbeddedResource Include="img\icons\icon_153.png" />
+    <EmbeddedResource Include="img\icons\icon_154.png" />
+    <EmbeddedResource Include="img\icons\icon_155.png" />
+    <EmbeddedResource Include="img\icons\icon_156.png" />
+    <EmbeddedResource Include="img\icons\icon_157.png" />
+    <EmbeddedResource Include="img\icons\icon_158.png" />
+    <EmbeddedResource Include="img\icons\icon_159.png" />
+    <EmbeddedResource Include="img\icons\icon_16.png" />
+    <EmbeddedResource Include="img\icons\icon_160.png" />
+    <EmbeddedResource Include="img\icons\icon_161.png" />
+    <EmbeddedResource Include="img\icons\icon_162.png" />
+    <EmbeddedResource Include="img\icons\icon_163.png" />
+    <EmbeddedResource Include="img\icons\icon_164.png" />
+    <EmbeddedResource Include="img\icons\icon_165.png" />
+    <EmbeddedResource Include="img\icons\icon_166.png" />
+    <EmbeddedResource Include="img\icons\icon_167.png" />
+    <EmbeddedResource Include="img\icons\icon_168.png" />
+    <EmbeddedResource Include="img\icons\icon_169.png" />
+    <EmbeddedResource Include="img\icons\icon_17.png" />
+    <EmbeddedResource Include="img\icons\icon_170.png" />
+    <EmbeddedResource Include="img\icons\icon_171.png" />
+    <EmbeddedResource Include="img\icons\icon_172.png" />
+    <EmbeddedResource Include="img\icons\icon_173.png" />
+    <EmbeddedResource Include="img\icons\icon_174.png" />
+    <EmbeddedResource Include="img\icons\icon_175.png" />
+    <EmbeddedResource Include="img\icons\icon_176.png" />
+    <EmbeddedResource Include="img\icons\icon_177.png" />
+    <EmbeddedResource Include="img\icons\icon_178.png" />
+    <EmbeddedResource Include="img\icons\icon_179.png" />
+    <EmbeddedResource Include="img\icons\icon_18.png" />
+    <EmbeddedResource Include="img\icons\icon_180.png" />
+    <EmbeddedResource Include="img\icons\icon_181.png" />
+    <EmbeddedResource Include="img\icons\icon_182.png" />
+    <EmbeddedResource Include="img\icons\icon_183.png" />
+    <EmbeddedResource Include="img\icons\icon_184.png" />
+    <EmbeddedResource Include="img\icons\icon_185.png" />
+    <EmbeddedResource Include="img\icons\icon_186.png" />
+    <EmbeddedResource Include="img\icons\icon_187.png" />
+    <EmbeddedResource Include="img\icons\icon_188.png" />
+    <EmbeddedResource Include="img\icons\icon_189.png" />
+    <EmbeddedResource Include="img\icons\icon_19.png" />
+    <EmbeddedResource Include="img\icons\icon_190.png" />
+    <EmbeddedResource Include="img\icons\icon_191.png" />
+    <EmbeddedResource Include="img\icons\icon_192.png" />
+    <EmbeddedResource Include="img\icons\icon_193.png" />
+    <EmbeddedResource Include="img\icons\icon_194.png" />
+    <EmbeddedResource Include="img\icons\icon_195.png" />
+    <EmbeddedResource Include="img\icons\icon_196.png" />
+    <EmbeddedResource Include="img\icons\icon_197.png" />
+    <EmbeddedResource Include="img\icons\icon_198.png" />
+    <EmbeddedResource Include="img\icons\icon_199.png" />
+    <EmbeddedResource Include="img\icons\icon_2.png" />
+    <EmbeddedResource Include="img\icons\icon_20.png" />
+    <EmbeddedResource Include="img\icons\icon_200.png" />
+    <EmbeddedResource Include="img\icons\icon_201.png" />
+    <EmbeddedResource Include="img\icons\icon_202.png" />
+    <EmbeddedResource Include="img\icons\icon_203.png" />
+    <EmbeddedResource Include="img\icons\icon_204.png" />
+    <EmbeddedResource Include="img\icons\icon_205.png" />
+    <EmbeddedResource Include="img\icons\icon_206.png" />
+    <EmbeddedResource Include="img\icons\icon_207.png" />
+    <EmbeddedResource Include="img\icons\icon_208.png" />
+    <EmbeddedResource Include="img\icons\icon_209.png" />
+    <EmbeddedResource Include="img\icons\icon_21.png" />
+    <EmbeddedResource Include="img\icons\icon_210.png" />
+    <EmbeddedResource Include="img\icons\icon_211.png" />
+    <EmbeddedResource Include="img\icons\icon_212.png" />
+    <EmbeddedResource Include="img\icons\icon_213.png" />
+    <EmbeddedResource Include="img\icons\icon_214.png" />
+    <EmbeddedResource Include="img\icons\icon_215.png" />
+    <EmbeddedResource Include="img\icons\icon_216.png" />
+    <EmbeddedResource Include="img\icons\icon_217.png" />
+    <EmbeddedResource Include="img\icons\icon_218.png" />
+    <EmbeddedResource Include="img\icons\icon_219.png" />
+    <EmbeddedResource Include="img\icons\icon_22.png" />
+    <EmbeddedResource Include="img\icons\icon_220.png" />
+    <EmbeddedResource Include="img\icons\icon_221.png" />
+    <EmbeddedResource Include="img\icons\icon_222.png" />
+    <EmbeddedResource Include="img\icons\icon_223.png" />
+    <EmbeddedResource Include="img\icons\icon_224.png" />
+    <EmbeddedResource Include="img\icons\icon_225.png" />
+    <EmbeddedResource Include="img\icons\icon_226.png" />
+    <EmbeddedResource Include="img\icons\icon_227.png" />
+    <EmbeddedResource Include="img\icons\icon_228.png" />
+    <EmbeddedResource Include="img\icons\icon_229.png" />
+    <EmbeddedResource Include="img\icons\icon_23.png" />
+    <EmbeddedResource Include="img\icons\icon_230.png" />
+    <EmbeddedResource Include="img\icons\icon_231.png" />
+    <EmbeddedResource Include="img\icons\icon_232.png" />
+    <EmbeddedResource Include="img\icons\icon_233.png" />
+    <EmbeddedResource Include="img\icons\icon_234.png" />
+    <EmbeddedResource Include="img\icons\icon_235.png" />
+    <EmbeddedResource Include="img\icons\icon_236.png" />
+    <EmbeddedResource Include="img\icons\icon_237.png" />
+    <EmbeddedResource Include="img\icons\icon_238.png" />
+    <EmbeddedResource Include="img\icons\icon_239.png" />
+    <EmbeddedResource Include="img\icons\icon_24.png" />
+    <EmbeddedResource Include="img\icons\icon_240.png" />
+    <EmbeddedResource Include="img\icons\icon_241.png" />
+    <EmbeddedResource Include="img\icons\icon_242.png" />
+    <EmbeddedResource Include="img\icons\icon_243.png" />
+    <EmbeddedResource Include="img\icons\icon_244.png" />
+    <EmbeddedResource Include="img\icons\icon_245.png" />
+    <EmbeddedResource Include="img\icons\icon_246.png" />
+    <EmbeddedResource Include="img\icons\icon_247.png" />
+    <EmbeddedResource Include="img\icons\icon_248.png" />
+    <EmbeddedResource Include="img\icons\icon_249.png" />
+    <EmbeddedResource Include="img\icons\icon_25.png" />
+    <EmbeddedResource Include="img\icons\icon_250.png" />
+    <EmbeddedResource Include="img\icons\icon_251.png" />
+    <EmbeddedResource Include="img\icons\icon_252.png" />
+    <EmbeddedResource Include="img\icons\icon_253.png" />
+    <EmbeddedResource Include="img\icons\icon_254.png" />
+    <EmbeddedResource Include="img\icons\icon_255.png" />
+    <EmbeddedResource Include="img\icons\icon_256.png" />
+    <EmbeddedResource Include="img\icons\icon_257.png" />
+    <EmbeddedResource Include="img\icons\icon_258.png" />
+    <EmbeddedResource Include="img\icons\icon_259.png" />
+    <EmbeddedResource Include="img\icons\icon_26.png" />
+    <EmbeddedResource Include="img\icons\icon_260.png" />
+    <EmbeddedResource Include="img\icons\icon_261.png" />
+    <EmbeddedResource Include="img\icons\icon_262.png" />
+    <EmbeddedResource Include="img\icons\icon_263.png" />
+    <EmbeddedResource Include="img\icons\icon_264.png" />
+    <EmbeddedResource Include="img\icons\icon_265.png" />
+    <EmbeddedResource Include="img\icons\icon_266.png" />
+    <EmbeddedResource Include="img\icons\icon_267.png" />
+    <EmbeddedResource Include="img\icons\icon_268.png" />
+    <EmbeddedResource Include="img\icons\icon_269.png" />
+    <EmbeddedResource Include="img\icons\icon_27.png" />
+    <EmbeddedResource Include="img\icons\icon_270.png" />
+    <EmbeddedResource Include="img\icons\icon_271.png" />
+    <EmbeddedResource Include="img\icons\icon_272.png" />
+    <EmbeddedResource Include="img\icons\icon_273.png" />
+    <EmbeddedResource Include="img\icons\icon_274.png" />
+    <EmbeddedResource Include="img\icons\icon_275.png" />
+    <EmbeddedResource Include="img\icons\icon_276.png" />
+    <EmbeddedResource Include="img\icons\icon_277.png" />
+    <EmbeddedResource Include="img\icons\icon_278.png" />
+    <EmbeddedResource Include="img\icons\icon_279.png" />
+    <EmbeddedResource Include="img\icons\icon_28.png" />
+    <EmbeddedResource Include="img\icons\icon_280.png" />
+    <EmbeddedResource Include="img\icons\icon_281.png" />
+    <EmbeddedResource Include="img\icons\icon_282.png" />
+    <EmbeddedResource Include="img\icons\icon_283.png" />
+    <EmbeddedResource Include="img\icons\icon_284.png" />
+    <EmbeddedResource Include="img\icons\icon_285.png" />
+    <EmbeddedResource Include="img\icons\icon_286.png" />
+    <EmbeddedResource Include="img\icons\icon_287.png" />
+    <EmbeddedResource Include="img\icons\icon_288.png" />
+    <EmbeddedResource Include="img\icons\icon_289.png" />
+    <EmbeddedResource Include="img\icons\icon_29.png" />
+    <EmbeddedResource Include="img\icons\icon_290.png" />
+    <EmbeddedResource Include="img\icons\icon_291.png" />
+    <EmbeddedResource Include="img\icons\icon_292.png" />
+    <EmbeddedResource Include="img\icons\icon_293.png" />
+    <EmbeddedResource Include="img\icons\icon_294.png" />
+    <EmbeddedResource Include="img\icons\icon_295.png" />
+    <EmbeddedResource Include="img\icons\icon_296.png" />
+    <EmbeddedResource Include="img\icons\icon_297.png" />
+    <EmbeddedResource Include="img\icons\icon_298.png" />
+    <EmbeddedResource Include="img\icons\icon_299.png" />
+    <EmbeddedResource Include="img\icons\icon_3.png" />
+    <EmbeddedResource Include="img\icons\icon_30.png" />
+    <EmbeddedResource Include="img\icons\icon_300.png" />
+    <EmbeddedResource Include="img\icons\icon_301.png" />
+    <EmbeddedResource Include="img\icons\icon_302.png" />
+    <EmbeddedResource Include="img\icons\icon_303.png" />
+    <EmbeddedResource Include="img\icons\icon_304.png" />
+    <EmbeddedResource Include="img\icons\icon_305.png" />
+    <EmbeddedResource Include="img\icons\icon_306.png" />
+    <EmbeddedResource Include="img\icons\icon_307.png" />
+    <EmbeddedResource Include="img\icons\icon_308.png" />
+    <EmbeddedResource Include="img\icons\icon_309.png" />
+    <EmbeddedResource Include="img\icons\icon_31.png" />
+    <EmbeddedResource Include="img\icons\icon_310.png" />
+    <EmbeddedResource Include="img\icons\icon_311.png" />
+    <EmbeddedResource Include="img\icons\icon_312.png" />
+    <EmbeddedResource Include="img\icons\icon_313.png" />
+    <EmbeddedResource Include="img\icons\icon_314.png" />
+    <EmbeddedResource Include="img\icons\icon_315.png" />
+    <EmbeddedResource Include="img\icons\icon_316.png" />
+    <EmbeddedResource Include="img\icons\icon_317.png" />
+    <EmbeddedResource Include="img\icons\icon_318.png" />
+    <EmbeddedResource Include="img\icons\icon_319.png" />
+    <EmbeddedResource Include="img\icons\icon_32.png" />
+    <EmbeddedResource Include="img\icons\icon_320.png" />
+    <EmbeddedResource Include="img\icons\icon_321.png" />
+    <EmbeddedResource Include="img\icons\icon_322.png" />
+    <EmbeddedResource Include="img\icons\icon_323.png" />
+    <EmbeddedResource Include="img\icons\icon_324.png" />
+    <EmbeddedResource Include="img\icons\icon_325.png" />
+    <EmbeddedResource Include="img\icons\icon_326.png" />
+    <EmbeddedResource Include="img\icons\icon_327.png" />
+    <EmbeddedResource Include="img\icons\icon_328.png" />
+    <EmbeddedResource Include="img\icons\icon_329.png" />
+    <EmbeddedResource Include="img\icons\icon_33.png" />
+    <EmbeddedResource Include="img\icons\icon_330.png" />
+    <EmbeddedResource Include="img\icons\icon_331.png" />
+    <EmbeddedResource Include="img\icons\icon_332.png" />
+    <EmbeddedResource Include="img\icons\icon_333.png" />
+    <EmbeddedResource Include="img\icons\icon_334.png" />
+    <EmbeddedResource Include="img\icons\icon_335.png" />
+    <EmbeddedResource Include="img\icons\icon_336.png" />
+    <EmbeddedResource Include="img\icons\icon_337.png" />
+    <EmbeddedResource Include="img\icons\icon_338.png" />
+    <EmbeddedResource Include="img\icons\icon_339.png" />
+    <EmbeddedResource Include="img\icons\icon_34.png" />
+    <EmbeddedResource Include="img\icons\icon_340.png" />
+    <EmbeddedResource Include="img\icons\icon_341.png" />
+    <EmbeddedResource Include="img\icons\icon_342.png" />
+    <EmbeddedResource Include="img\icons\icon_343.png" />
+    <EmbeddedResource Include="img\icons\icon_344.png" />
+    <EmbeddedResource Include="img\icons\icon_345.png" />
+    <EmbeddedResource Include="img\icons\icon_346.png" />
+    <EmbeddedResource Include="img\icons\icon_347.png" />
+    <EmbeddedResource Include="img\icons\icon_348.png" />
+    <EmbeddedResource Include="img\icons\icon_349.png" />
+    <EmbeddedResource Include="img\icons\icon_35.png" />
+    <EmbeddedResource Include="img\icons\icon_350.png" />
+    <EmbeddedResource Include="img\icons\icon_351.png" />
+    <EmbeddedResource Include="img\icons\icon_352.png" />
+    <EmbeddedResource Include="img\icons\icon_353.png" />
+    <EmbeddedResource Include="img\icons\icon_354.png" />
+    <EmbeddedResource Include="img\icons\icon_355.png" />
+    <EmbeddedResource Include="img\icons\icon_356.png" />
+    <EmbeddedResource Include="img\icons\icon_357.png" />
+    <EmbeddedResource Include="img\icons\icon_358.png" />
+    <EmbeddedResource Include="img\icons\icon_359.png" />
+    <EmbeddedResource Include="img\icons\icon_36.png" />
+    <EmbeddedResource Include="img\icons\icon_360.png" />
+    <EmbeddedResource Include="img\icons\icon_361.png" />
+    <EmbeddedResource Include="img\icons\icon_362.png" />
+    <EmbeddedResource Include="img\icons\icon_363.png" />
+    <EmbeddedResource Include="img\icons\icon_364.png" />
+    <EmbeddedResource Include="img\icons\icon_365.png" />
+    <EmbeddedResource Include="img\icons\icon_366.png" />
+    <EmbeddedResource Include="img\icons\icon_367.png" />
+    <EmbeddedResource Include="img\icons\icon_368.png" />
+    <EmbeddedResource Include="img\icons\icon_369.png" />
+    <EmbeddedResource Include="img\icons\icon_37.png" />
+    <EmbeddedResource Include="img\icons\icon_370.png" />
+    <EmbeddedResource Include="img\icons\icon_371.png" />
+    <EmbeddedResource Include="img\icons\icon_372.png" />
+    <EmbeddedResource Include="img\icons\icon_373.png" />
+    <EmbeddedResource Include="img\icons\icon_374.png" />
+    <EmbeddedResource Include="img\icons\icon_375.png" />
+    <EmbeddedResource Include="img\icons\icon_376.png" />
+    <EmbeddedResource Include="img\icons\icon_377.png" />
+    <EmbeddedResource Include="img\icons\icon_378.png" />
+    <EmbeddedResource Include="img\icons\icon_379.png" />
+    <EmbeddedResource Include="img\icons\icon_38.png" />
+    <EmbeddedResource Include="img\icons\icon_380.png" />
+    <EmbeddedResource Include="img\icons\icon_381.png" />
+    <EmbeddedResource Include="img\icons\icon_382.png" />
+    <EmbeddedResource Include="img\icons\icon_383.png" />
+    <EmbeddedResource Include="img\icons\icon_384.png" />
+    <EmbeddedResource Include="img\icons\icon_385.png" />
+    <EmbeddedResource Include="img\icons\icon_386.png" />
+    <EmbeddedResource Include="img\icons\icon_387.png" />
+    <EmbeddedResource Include="img\icons\icon_388.png" />
+    <EmbeddedResource Include="img\icons\icon_389.png" />
+    <EmbeddedResource Include="img\icons\icon_39.png" />
+    <EmbeddedResource Include="img\icons\icon_4.png" />
+    <EmbeddedResource Include="img\icons\icon_40.png" />
+    <EmbeddedResource Include="img\icons\icon_41.png" />
+    <EmbeddedResource Include="img\icons\icon_42.png" />
+    <EmbeddedResource Include="img\icons\icon_43.png" />
+    <EmbeddedResource Include="img\icons\icon_44.png" />
+    <EmbeddedResource Include="img\icons\icon_45.png" />
+    <EmbeddedResource Include="img\icons\icon_46.png" />
+    <EmbeddedResource Include="img\icons\icon_47.png" />
+    <EmbeddedResource Include="img\icons\icon_48.png" />
+    <EmbeddedResource Include="img\icons\icon_49.png" />
+    <EmbeddedResource Include="img\icons\icon_5.png" />
+    <EmbeddedResource Include="img\icons\icon_50.png" />
+    <EmbeddedResource Include="img\icons\icon_51.png" />
+    <EmbeddedResource Include="img\icons\icon_52.png" />
+    <EmbeddedResource Include="img\icons\icon_53.png" />
+    <EmbeddedResource Include="img\icons\icon_54.png" />
+    <EmbeddedResource Include="img\icons\icon_55.png" />
+    <EmbeddedResource Include="img\icons\icon_56.png" />
+    <EmbeddedResource Include="img\icons\icon_57.png" />
+    <EmbeddedResource Include="img\icons\icon_58.png" />
+    <EmbeddedResource Include="img\icons\icon_59.png" />
+    <EmbeddedResource Include="img\icons\icon_6.png" />
+    <EmbeddedResource Include="img\icons\icon_60.png" />
+    <EmbeddedResource Include="img\icons\icon_61.png" />
+    <EmbeddedResource Include="img\icons\icon_62.png" />
+    <EmbeddedResource Include="img\icons\icon_63.png" />
+    <EmbeddedResource Include="img\icons\icon_64.png" />
+    <EmbeddedResource Include="img\icons\icon_65.png" />
+    <EmbeddedResource Include="img\icons\icon_66.png" />
+    <EmbeddedResource Include="img\icons\icon_67.png" />
+    <EmbeddedResource Include="img\icons\icon_68.png" />
+    <EmbeddedResource Include="img\icons\icon_69.png" />
+    <EmbeddedResource Include="img\icons\icon_7.png" />
+    <EmbeddedResource Include="img\icons\icon_70.png" />
+    <EmbeddedResource Include="img\icons\icon_71.png" />
+    <EmbeddedResource Include="img\icons\icon_72.png" />
+    <EmbeddedResource Include="img\icons\icon_73.png" />
+    <EmbeddedResource Include="img\icons\icon_74.png" />
+    <EmbeddedResource Include="img\icons\icon_75.png" />
+    <EmbeddedResource Include="img\icons\icon_76.png" />
+    <EmbeddedResource Include="img\icons\icon_77.png" />
+    <EmbeddedResource Include="img\icons\icon_78.png" />
+    <EmbeddedResource Include="img\icons\icon_79.png" />
+    <EmbeddedResource Include="img\icons\icon_8.png" />
+    <EmbeddedResource Include="img\icons\icon_80.png" />
+    <EmbeddedResource Include="img\icons\icon_81.png" />
+    <EmbeddedResource Include="img\icons\icon_82.png" />
+    <EmbeddedResource Include="img\icons\icon_83.png" />
+    <EmbeddedResource Include="img\icons\icon_84.png" />
+    <EmbeddedResource Include="img\icons\icon_85.png" />
+    <EmbeddedResource Include="img\icons\icon_86.png" />
+    <EmbeddedResource Include="img\icons\icon_87.png" />
+    <EmbeddedResource Include="img\icons\icon_88.png" />
+    <EmbeddedResource Include="img\icons\icon_89.png" />
+    <EmbeddedResource Include="img\icons\icon_9.png" />
+    <EmbeddedResource Include="img\icons\icon_90.png" />
+    <EmbeddedResource Include="img\icons\icon_91.png" />
+    <EmbeddedResource Include="img\icons\icon_92.png" />
+    <EmbeddedResource Include="img\icons\icon_93.png" />
+    <EmbeddedResource Include="img\icons\icon_94.png" />
+    <EmbeddedResource Include="img\icons\icon_95.png" />
+    <EmbeddedResource Include="img\icons\icon_96.png" />
+    <EmbeddedResource Include="img\icons\icon_97.png" />
+    <EmbeddedResource Include="img\icons\icon_98.png" />
+    <EmbeddedResource Include="img\icons\icon_99.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="img\portraits\portrait_0.png" />
+    <EmbeddedResource Include="img\portraits\portrait_1.png" />
+    <EmbeddedResource Include="img\portraits\portrait_10.png" />
+    <EmbeddedResource Include="img\portraits\portrait_100.png" />
+    <EmbeddedResource Include="img\portraits\portrait_101.png" />
+    <EmbeddedResource Include="img\portraits\portrait_102.png" />
+    <EmbeddedResource Include="img\portraits\portrait_103.png" />
+    <EmbeddedResource Include="img\portraits\portrait_104.png" />
+    <EmbeddedResource Include="img\portraits\portrait_105.png" />
+    <EmbeddedResource Include="img\portraits\portrait_106.png" />
+    <EmbeddedResource Include="img\portraits\portrait_107.png" />
+    <EmbeddedResource Include="img\portraits\portrait_108.png" />
+    <EmbeddedResource Include="img\portraits\portrait_109.png" />
+    <EmbeddedResource Include="img\portraits\portrait_11.png" />
+    <EmbeddedResource Include="img\portraits\portrait_12.png" />
+    <EmbeddedResource Include="img\portraits\portrait_13.png" />
+    <EmbeddedResource Include="img\portraits\portrait_14.png" />
+    <EmbeddedResource Include="img\portraits\portrait_15.png" />
+    <EmbeddedResource Include="img\portraits\portrait_16.png" />
+    <EmbeddedResource Include="img\portraits\portrait_17.png" />
+    <EmbeddedResource Include="img\portraits\portrait_18.png" />
+    <EmbeddedResource Include="img\portraits\portrait_19.png" />
+    <EmbeddedResource Include="img\portraits\portrait_2.png" />
+    <EmbeddedResource Include="img\portraits\portrait_20.png" />
+    <EmbeddedResource Include="img\portraits\portrait_21.png" />
+    <EmbeddedResource Include="img\portraits\portrait_22.png" />
+    <EmbeddedResource Include="img\portraits\portrait_23.png" />
+    <EmbeddedResource Include="img\portraits\portrait_24.png" />
+    <EmbeddedResource Include="img\portraits\portrait_25.png" />
+    <EmbeddedResource Include="img\portraits\portrait_26.png" />
+    <EmbeddedResource Include="img\portraits\portrait_27.png" />
+    <EmbeddedResource Include="img\portraits\portrait_28.png" />
+    <EmbeddedResource Include="img\portraits\portrait_29.png" />
+    <EmbeddedResource Include="img\portraits\portrait_3.png" />
+    <EmbeddedResource Include="img\portraits\portrait_30.png" />
+    <EmbeddedResource Include="img\portraits\portrait_31.png" />
+    <EmbeddedResource Include="img\portraits\portrait_32.png" />
+    <EmbeddedResource Include="img\portraits\portrait_33.png" />
+    <EmbeddedResource Include="img\portraits\portrait_34.png" />
+    <EmbeddedResource Include="img\portraits\portrait_35.png" />
+    <EmbeddedResource Include="img\portraits\portrait_36.png" />
+    <EmbeddedResource Include="img\portraits\portrait_37.png" />
+    <EmbeddedResource Include="img\portraits\portrait_38.png" />
+    <EmbeddedResource Include="img\portraits\portrait_39.png" />
+    <EmbeddedResource Include="img\portraits\portrait_4.png" />
+    <EmbeddedResource Include="img\portraits\portrait_40.png" />
+    <EmbeddedResource Include="img\portraits\portrait_41.png" />
+    <EmbeddedResource Include="img\portraits\portrait_42.png" />
+    <EmbeddedResource Include="img\portraits\portrait_43.png" />
+    <EmbeddedResource Include="img\portraits\portrait_44.png" />
+    <EmbeddedResource Include="img\portraits\portrait_45.png" />
+    <EmbeddedResource Include="img\portraits\portrait_46.png" />
+    <EmbeddedResource Include="img\portraits\portrait_47.png" />
+    <EmbeddedResource Include="img\portraits\portrait_48.png" />
+    <EmbeddedResource Include="img\portraits\portrait_49.png" />
+    <EmbeddedResource Include="img\portraits\portrait_5.png" />
+    <EmbeddedResource Include="img\portraits\portrait_50.png" />
+    <EmbeddedResource Include="img\portraits\portrait_51.png" />
+    <EmbeddedResource Include="img\portraits\portrait_52.png" />
+    <EmbeddedResource Include="img\portraits\portrait_53.png" />
+    <EmbeddedResource Include="img\portraits\portrait_54.png" />
+    <EmbeddedResource Include="img\portraits\portrait_55.png" />
+    <EmbeddedResource Include="img\portraits\portrait_56.png" />
+    <EmbeddedResource Include="img\portraits\portrait_57.png" />
+    <EmbeddedResource Include="img\portraits\portrait_58.png" />
+    <EmbeddedResource Include="img\portraits\portrait_59.png" />
+    <EmbeddedResource Include="img\portraits\portrait_6.png" />
+    <EmbeddedResource Include="img\portraits\portrait_60.png" />
+    <EmbeddedResource Include="img\portraits\portrait_61.png" />
+    <EmbeddedResource Include="img\portraits\portrait_62.png" />
+    <EmbeddedResource Include="img\portraits\portrait_63.png" />
+    <EmbeddedResource Include="img\portraits\portrait_64.png" />
+    <EmbeddedResource Include="img\portraits\portrait_65.png" />
+    <EmbeddedResource Include="img\portraits\portrait_66.png" />
+    <EmbeddedResource Include="img\portraits\portrait_67.png" />
+    <EmbeddedResource Include="img\portraits\portrait_68.png" />
+    <EmbeddedResource Include="img\portraits\portrait_69.png" />
+    <EmbeddedResource Include="img\portraits\portrait_7.png" />
+    <EmbeddedResource Include="img\portraits\portrait_70.png" />
+    <EmbeddedResource Include="img\portraits\portrait_71.png" />
+    <EmbeddedResource Include="img\portraits\portrait_72.png" />
+    <EmbeddedResource Include="img\portraits\portrait_73.png" />
+    <EmbeddedResource Include="img\portraits\portrait_74.png" />
+    <EmbeddedResource Include="img\portraits\portrait_75.png" />
+    <EmbeddedResource Include="img\portraits\portrait_76.png" />
+    <EmbeddedResource Include="img\portraits\portrait_77.png" />
+    <EmbeddedResource Include="img\portraits\portrait_78.png" />
+    <EmbeddedResource Include="img\portraits\portrait_79.png" />
+    <EmbeddedResource Include="img\portraits\portrait_8.png" />
+    <EmbeddedResource Include="img\portraits\portrait_80.png" />
+    <EmbeddedResource Include="img\portraits\portrait_81.png" />
+    <EmbeddedResource Include="img\portraits\portrait_82.png" />
+    <EmbeddedResource Include="img\portraits\portrait_83.png" />
+    <EmbeddedResource Include="img\portraits\portrait_84.png" />
+    <EmbeddedResource Include="img\portraits\portrait_85.png" />
+    <EmbeddedResource Include="img\portraits\portrait_86.png" />
+    <EmbeddedResource Include="img\portraits\portrait_87.png" />
+    <EmbeddedResource Include="img\portraits\portrait_88.png" />
+    <EmbeddedResource Include="img\portraits\portrait_89.png" />
+    <EmbeddedResource Include="img\portraits\portrait_9.png" />
+    <EmbeddedResource Include="img\portraits\portrait_90.png" />
+    <EmbeddedResource Include="img\portraits\portrait_91.png" />
+    <EmbeddedResource Include="img\portraits\portrait_92.png" />
+    <EmbeddedResource Include="img\portraits\portrait_93.png" />
+    <EmbeddedResource Include="img\portraits\portrait_94.png" />
+    <EmbeddedResource Include="img\portraits\portrait_95.png" />
+    <EmbeddedResource Include="img\portraits\portrait_96.png" />
+    <EmbeddedResource Include="img\portraits\portrait_97.png" />
+    <EmbeddedResource Include="img\portraits\portrait_98.png" />
+    <EmbeddedResource Include="img\portraits\portrait_99.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Fody.2.0.0\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.2.0.0\build\dotnet\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.2.0.0\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.2.0.0\build\dotnet\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets'))" />
+  </Target>
+  <Import Project="..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
