@@ -236,7 +236,7 @@ namespace StarcraftEPDTriggers.src.data {
         }
 
         public static readonly MemoryPlace PlayerColorSelCircle = _getSetPlayerColor("Set Player Color (Experimental)", 0x581D74, 8, IngamePlayerDef.AllIngamePlayers.Length);
-
+      
 
         public static readonly MemoryPlace UnitGraphics = _get("Set Unit Graphics", 0x006644F8, 1, UnitDef.AllUnits.Length, "unit graphics for ", UnitDef.getByIndex, FlingyImageDef.getByIndex, true);
         public static readonly MemoryPlace UnitMineralCost = _get("Set Unit Mineral Cost", 0x00663888, 2, UnitDef.AllUnits.Length, "unit mineral cost for ", UnitDef.getByIndex, (int index)=>Int16Def.getByIndex(index, false), true);
@@ -310,12 +310,16 @@ namespace StarcraftEPDTriggers.src.data {
 
         public static readonly MemoryPlace Acceleration = _get("Set Acceleration", 0x006C9C78, 2, FlingyDef.AllFlingys.Length, "acceleration for ", FlingyDef.getByIndex, (int index) => Int16Def.getByIndex(index, false), true);
         public static readonly MemoryPlace TopSpeed = _get("Set Top Speed", 0x006C9EF8, 4, FlingyDef.AllFlingys.Length, "top speed for ", FlingyDef.getByIndex, (int index) => Int32Def.getByIndex(index, false), true);
-        public static readonly MemoryPlace MovementControl = _get("Set Movement Control", 0x0006C9858, 1, FlingyDef.AllFlingys.Length, "movement control for ", FlingyDef.getByIndex, (int index) => Int8Def.getByIndex(index, false), true);
+        public static readonly MemoryPlace MovementControl = _get("Set Movement Control", 0x0006C9858, 1, FlingyDef.AllFlingys.Length, "movement control for ", FlingyDef.getByIndex, MovementControlDef.getByIndex, true);
         public static readonly MemoryPlace PlayerColor = _get("Set Player Color (Unknown)", 0x0057F21C, 4, 8, "color for ", PlayerDef.getByIndex, (int index) => Int32Def.getByIndex(index, false), true);
 
 
         public static readonly MemoryPlace KeyPress = _getKey("Key Pressed", 0x00596A18, 1, KeyDef.AllKeys.Length);
         public static readonly MemoryPlace SetKills = _getSetKills("Set Kills (Experimental)", 0x005878A4, 4, UnitDef.AllUnits.Length * IngamePlayerDef.AllIngamePlayers.Length);
+
+        public static readonly MemoryPlace FlingySpriteIndex = _get("Set Flingy Sprite Index", 0x006CA318, 2, FlingyDef.AllFlingys.Length, "sprite ID for Flingy ", FlingyDef.getByIndex, SpriteDef.getByIndex, true);
+        public static readonly MemoryPlace ImageScriptID = _get("Set Image IScript ID", 0x0066EC48, 4, ImageDef.AllImages.Length, "IScript ID for Image ", ImageDef.getByIndex, IScriptDef.getByIndex, true);
+
 
 
         //public static readonly MemoryPlace Latency = _get1("Set Game Latency", 0x0051CE84, 4, "game latency to ", LatencyDef.getByIndex, true);

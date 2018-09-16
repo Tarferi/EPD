@@ -111,6 +111,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\data\History.cs" />
     <Compile Include="src\data\StarcraftDefaultMemory.cs" />
     <Compile Include="src\parser\MyBetterReader.cs" />
     <Compile Include="src\wnd\wndAbout.xaml.cs">

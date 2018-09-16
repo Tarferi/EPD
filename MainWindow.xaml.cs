@@ -118,6 +118,18 @@ namespace StarcraftEPDTriggers {
             //loadMap("C:/Users/Tom/Desktop/Documents/Starcraft/Maps/moje mapy/majne Sniper STFU.scx");
             //loadMap("C:/Users/Tom/Desktop/Documents/Starcraft/Maps/moje mapy/MILES Laser Tag V8L ELITE.scx");
 
+            updateHistory();
+        }
+
+        private void updateHistory() {
+            List<String> data = History.getHistory();
+            this.txtMapName.Items.Clear();
+            foreach(String str in data) {
+                this.txtMapName.Items.Add(str);
+            }
+            if (txtMapName.Items.Count > 0) {
+                txtMapName.SelectedIndex = 0;
+            }
         }
 
         private void saveToFile(string path) {
@@ -148,6 +160,8 @@ namespace StarcraftEPDTriggers {
 
         private void mapLoaded(bool loadedOk) {
             if (loadedOk) {
+                History.addToHistory(loadedMapPath);
+                updateHistory();
                 setState(AppState.MapOpened);
                 updateLists();
                 if(EPDAction.InvalidTriggers != 0) {
@@ -446,6 +460,7 @@ namespace StarcraftEPDTriggers {
 
         private void btnClose_Click(object sender, RoutedEventArgs e) {
             if (CurrentState == AppState.NothingOpened) { // Open a map
+                loadedMapPath = txtMapName.Text;
                 if (loadedMapPath.Length > 0) { // Have something in a history
                     loadMap(loadedMapPath);
                 } else { // Have nothing in a history, open a dialog

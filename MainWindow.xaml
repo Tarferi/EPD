@@ -36,7 +36,7 @@
                     </LinearGradientBrush>
                 </Grid.Background>
                 <Label Content="Loaded map:" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                <TextBox x:Name="txtMapName" Height="23" Margin="94,13,220,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="1.396,0.609" Background="Transparent" BorderThickness="1,1,0,1"/>
+                <ComboBox x:Name="txtMapName" Height="23" Margin="94,13,220,0" IsEditable="True" VerticalAlignment="Top" RenderTransformOrigin="1.396,0.609" Background="Transparent" BorderThickness="1,1,0,1"/>
                 <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Right" Margin="0,13,90,0" VerticalAlignment="Top" Width="75" Height="23" Background="#FF6FFFA3" IsEnabled="False" Click="btnSave_Click"/>
                 <Button x:Name="btnClose" Content="Open" HorizontalAlignment="Right" Margin="0,13,10,0" VerticalAlignment="Top" Width="75" Height="23" Background="#FF7FF3FF" Click="btnClose_Click"/>
                 <Button BorderBrush="{Binding BorderBrush, ElementName=txtMapName}" IsEnabled="{Binding IsEnabled, ElementName=txtMapName}" x:Name="btnClr" Content="r" HorizontalAlignment="Right" Margin="0,13,170,0" VerticalAlignment="Top" Width="50" Height="23" BorderThickness="0,1,1,1" FontFamily="Webdings" Click="btnClr_Click" Background="{x:Null}"/>

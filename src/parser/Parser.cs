@@ -16,6 +16,7 @@ namespace StarcraftEPDTriggers.src {
         }
 
         public bool parse() {
+            LocationDef.__setLocationsCountDoNotUseOutsideOfParser(256); // Safe keeping
             return parse(false);
         }
 
