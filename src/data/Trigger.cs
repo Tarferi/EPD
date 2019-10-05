@@ -42,9 +42,10 @@ namespace StarcraftEPDTriggers {
         public void reparseFromString(string str, src.data.TriggerCollection triggers, TriggerDefinitionPartProperties props) {
             Scanner s = new Scanner(str);
             Parser p = new Parser(s);
-            if(p.parse(true)) {
+            int zer = 0;
+            if (p.parse(true, ref zer, ref zer)) {
                 List<Trigger> trgs = p.getTriggers();
-                if(trgs.Count == 1) {
+                if (trgs.Count == 1) {
                     Trigger t = trgs[0];
                     triggerListItem = (RichTextBox) t.getTrigerListItem(props);
                     conditions = t.conditions;
@@ -59,7 +60,7 @@ namespace StarcraftEPDTriggers {
 
         public FrameworkElement getTrigerListItem(TriggerDefinitionPartProperties props) {
             //if (triggerListItem == null) {
-                regenerateTriggerListItem(props); // Nasty fuck around
+            regenerateTriggerListItem(props); // Nasty fuck around
             //}
             return triggerListItem;
         }
@@ -77,15 +78,15 @@ namespace StarcraftEPDTriggers {
             g.IsDocumentEnabled = true;
             g.IsReadOnly = true;
             g.Cursor = Cursors.Arrow;
-            Brush[] backgrounds = new Brush[] { new SolidColorBrush(Color.FromRgb(240,240,240)), new SolidColorBrush(Color.FromRgb(220, 220, 220)) };
+            Brush[] backgrounds = new Brush[] { new SolidColorBrush(Color.FromRgb(240, 240, 240)), new SolidColorBrush(Color.FromRgb(220, 220, 220)) };
             Brush backgroundBrush = backgrounds[0];
             g.SetValue(Paragraph.LineHeightProperty, 1.0);
             List<TriggerDefinitionPart> parts = getPartsF();
             Func<Func<object>, bool, string> placeHolderToString = (Func<object> placeHolder, bool allowNewline) => {
                 object output = placeHolder();
-                if(output is string) {
+                if (output is string) {
                     string text = output as string;
-                    if(!allowNewline) {
+                    if (!allowNewline) {
                         text = text.Replace("\r", "\\r").Replace("\n", "\\n");
                     }
                     return text;
@@ -145,7 +146,7 @@ namespace StarcraftEPDTriggers {
                 actionCounter++;
                 parts.Add(new TriggerDefinitionParagraphStart());
                 if (action is ActionComment && !MainWindow.IgnoreComments) {
-                    string title = action.ToString();
+                    string title = action.ToCommentString();
                     parts.Clear();
                     parts.Add(new TriggerDefinitionLabel(title));
                     return parts;
@@ -164,7 +165,7 @@ namespace StarcraftEPDTriggers {
             return "Trigger " + index;
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             StringBuilder sb = new StringBuilder();
 
             // Part 1
@@ -172,10 +173,14 @@ namespace StarcraftEPDTriggers {
             int affectedCount = affecteds.Count;
             int counter = 0;
             if (affectedCount != 1) {
-                foreach(PlayerDef affected in affecteds) {
+                foreach (PlayerDef affected in affecteds) {
                     counter++;
-                    sb.Append(affected.GroupIndex);
-                    if(counter!=affectedCount) {
+                    if (readable) {
+                        sb.Append("\"" + affected.GroupName + "\"");
+                    } else {
+                        sb.Append(affected.GroupIndex);
+                    }
+                    if (counter != affectedCount) {
                         sb.Append(", ");
                     }
                 }
@@ -187,18 +192,18 @@ namespace StarcraftEPDTriggers {
             // Part 2
             sb.Append("Conditions:\r\n");
             foreach (Condition cond in conditions) {
-                sb.Append("\t"+cond.ToSaveString() + "\r\n");
+                sb.Append("\t" + cond.ToSaveString(readable) + "\r\n");
             }
             sb.Append("\r\n");
 
             // Part 3
             sb.Append("Actions:\r\n");
             foreach (Action action in actions) {
-                sb.Append("\t"+action.ToSaveString() + "\r\n");
+                sb.Append("\t" + action.ToSaveString(readable) + "\r\n");
             }
-            if(flags != 0) {
+            if (flags != 0) {
                 StringBuilder bsb = new StringBuilder();
-                for(int i = 31; i >= 0; i--) {
+                for (int i = 31; i >= 0; i--) {
                     char flag = (flags & (1 << i)) > 0 ? '1' : '0';
                     bsb.Append(flag);
                 }
@@ -221,7 +226,7 @@ namespace StarcraftEPDTriggers {
 
     public interface SaveableItem {
 
-        string ToSaveString();
+        string ToSaveString(bool readable);
 
     }
 
@@ -253,7 +258,7 @@ namespace StarcraftEPDTriggers {
             return new TriggerDefinitionAdvancedPropertiesDef(getter, setter, getDefault);
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             throw new NotImplementedException();
         }
     }
@@ -266,7 +271,7 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return "\"" + ToString() + "\"";
         }
 
@@ -358,7 +363,7 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return "\"" + ToString() + "\"";
         }
 
@@ -963,8 +968,12 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
-            return ToString();
+        public string ToSaveString(bool readable) {
+            if (readable) {
+                return ToString();
+            } else {
+                return ToString();
+            }
         }
 
         public static readonly AllianceDef Ally = new AllianceDef("Ally");
@@ -980,11 +989,11 @@ namespace StarcraftEPDTriggers {
         }
 
         public int getIndex() {
-            if(this == Ally) {
+            if (this == Ally) {
                 return 0;
-            } else if(this == Enemy) {
+            } else if (this == Enemy) {
                 return 1;
-            } else if(this==AlliedVictory) {
+            } else if (this == AlliedVictory) {
                 return 2;
             }
             throw new NotImplementedException();
@@ -1080,16 +1089,16 @@ namespace StarcraftEPDTriggers {
         }
 
         public static BoolDef getByIndex(int index) {
-            if(index == 0) {
+            if (index == 0) {
                 return BoolFalse;
-            } else if(index == 1) {
+            } else if (index == 1) {
                 return BoolTrue;
             }
             throw new NotImplementedException();
         }
 
         public TriggerDefinitionPart getTriggerPart(Func<BoolDef> getter, Action<BoolDef> setter, Func<BoolDef> getDefault) {
-            return new TriggerDefinitionResetableCheckbox(() => getter() == BoolTrue, (bool b) => { setter(b ? BoolTrue : BoolFalse); }, ()=>getDefault() == BoolTrue);
+            return new TriggerDefinitionResetableCheckbox(() => getter() == BoolTrue, (bool b) => { setter(b ? BoolTrue : BoolFalse); }, () => getDefault() == BoolTrue);
         }
 
         private BoolDef(int val) {
@@ -1187,7 +1196,7 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return _saveValue;
         }
 
@@ -1209,11 +1218,11 @@ namespace StarcraftEPDTriggers {
         }
 
         public int getIndex() {
-            if(this == Enable) {
+            if (this == Enable) {
                 return 0;
-            } else if(this == Disable) {
+            } else if (this == Disable) {
                 return 1;
-            } else if(this == Toggle) {
+            } else if (this == Toggle) {
                 return 2;
             }
             throw new NotImplementedException();
@@ -1625,7 +1634,7 @@ namespace StarcraftEPDTriggers {
         }
     }
 
-    public class Image561Def :Gettable<Image561Def> {
+    public class Image561Def : Gettable<Image561Def> {
 
         private int _index;
         private string _name;
@@ -1667,7 +1676,7 @@ namespace StarcraftEPDTriggers {
                 if (_allImages == null) {
                     int off = 561;
                     int max = 581;
-                    int len = max-off;
+                    int len = max - off;
                     _allImages = new Image561Def[len];
                     for (int i = 0; i < _allImages.Length; i++) {
                         _allImages[i] = new Image561Def(i, ImageDef.AllImages[off + i]);
@@ -2740,7 +2749,7 @@ namespace StarcraftEPDTriggers {
 
 
     }
-    
+
     public class IngamePlayerDef : Gettable<IngamePlayerDef> {
 
         private int _index;
@@ -2811,7 +2820,7 @@ namespace StarcraftEPDTriggers {
             "Unknown 4",
         };
     }
-    
+
     public class IntDef : Gettable<IntDef>, SaveableItem {
 
         private int _value;
@@ -2848,7 +2857,7 @@ namespace StarcraftEPDTriggers {
             return UseHex ? "0x" + _value.ToString("X") : _value.ToString();
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return _value.ToString();
         }
     }
@@ -2875,7 +2884,7 @@ namespace StarcraftEPDTriggers {
         public Int16Def(int number, bool usehex) : base(number, usehex) { }
 
         public override int getMaxValue() {
-            return 255*255;
+            return 255 * 255;
         }
 
         public static new Int16Def getByIndex(int num, bool usehex) {
@@ -2883,7 +2892,7 @@ namespace StarcraftEPDTriggers {
         }
 
         public TriggerDefinitionPart getTriggerPart(Func<Int16Def> getter, Action<Int16Def> setter, Func<Int16Def> getDefault) {
-            return base.getTriggerPart(getter,(IntDef d) => { setter(new Int16Def(d.getIndex(), d.UseHex)); }, getDefault);
+            return base.getTriggerPart(getter, (IntDef d) => { setter(new Int16Def(d.getIndex(), d.UseHex)); }, getDefault);
         }
     }
 
@@ -3219,7 +3228,7 @@ namespace StarcraftEPDTriggers {
             throw new NotImplementedException();
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return ToString();
         }
 
@@ -3293,8 +3302,12 @@ namespace StarcraftEPDTriggers {
             return LocationName.ToString();
         }
 
-        public string ToSaveString() {
-            return _index.ToString();
+        public string ToSaveString(bool readable) {
+            if (readable) {
+                return "\"" + _name + "\"";
+            } else {
+                return _index.ToString();
+            }
         }
 
         public int getMaxValue() {
@@ -3332,8 +3345,12 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
-            return ToString();
+        public string ToSaveString(bool readable) {
+            if (readable) {
+                return "\"" + ToString() + "\"";
+            } else {
+                return ToString();
+            }
         }
 
         private MessageType(string value) {
@@ -3375,7 +3392,7 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return ToString();
         }
 
@@ -3441,14 +3458,14 @@ namespace StarcraftEPDTriggers {
         }
 
         public static PlayerColorDef getByIndex(int index) {
-            if(index < AllPlayerColors.Length) {
+            if (index < AllPlayerColors.Length) {
                 return AllPlayerColors[index];
             }
             throw new NotImplementedException();
         }
 
         public static PlayerColorDef getByPlayerIndex(int index) {
-            if(index < AllPlayerColorsSorted.Length) {
+            if (index < AllPlayerColorsSorted.Length) {
                 return AllPlayerColorsSorted[index];
             }
             throw new NotImplementedException();
@@ -3457,15 +3474,17 @@ namespace StarcraftEPDTriggers {
             return new TriggerDefinitionGeneralDef<PlayerColorDef>(getter, setter, getDefault, AllPlayerColorsSorted);
         }
 
-        public static PlayerColorDef[] AllPlayerColors { get {
+        public static PlayerColorDef[] AllPlayerColors {
+            get {
                 if (_allPlayerColors == null) {
                     _allPlayerColors = new PlayerColorDef[AllPlayerColorsSorted.Length];
-                    foreach(PlayerColorDef cd in AllPlayerColorsSorted) {
+                    foreach (PlayerColorDef cd in AllPlayerColorsSorted) {
                         _allPlayerColors[cd._index] = cd;
                     }
                 }
                 return _allPlayerColors;
-            } }
+            }
+        }
 
         private static PlayerColorDef[] _allPlayerColors;
 
@@ -3768,8 +3787,12 @@ namespace StarcraftEPDTriggers {
             return new TriggerDefinitionGeneralDef<PlayerDef>(getter, setter, getDefault, AllPlayers);
         }
 
-        public string ToSaveString() {
-            return GroupIndex.ToString();
+        public string ToSaveString(bool readable) {
+            if (readable) {
+                return "\"" + GroupName + "\"";
+            } else {
+                return GroupIndex.ToString();
+            }
         }
 
         internal static void __setPlayerNameDontUseOutsideOfParser(int i, string v) {
@@ -3832,7 +3855,7 @@ namespace StarcraftEPDTriggers {
         };
     }
 
-    public class PortraitIdleAvatarsDef: Gettable<PortraitIdleAvatarsDef>, GettableImage {
+    public class PortraitIdleAvatarsDef : Gettable<PortraitIdleAvatarsDef>, GettableImage {
 
         private int _index;
         private string _name;
@@ -3870,7 +3893,7 @@ namespace StarcraftEPDTriggers {
             _index = index;
             _name = PortraitDef.AllProtraits[index].PortraitName;
             if (index < AllPortraits.Length) {
-                _image = new BitmapImageX("portraits/portrait_" + index+".png", this);
+                _image = new BitmapImageX("portraits/portrait_" + index + ".png", this);
             } else {
                 throw new NotImplementedException();
             }
@@ -4206,7 +4229,7 @@ namespace StarcraftEPDTriggers {
             return new TriggerDefinitionPropertiesDef(getter, setter);
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return _value.ToString();
         }
 
@@ -4223,7 +4246,7 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return ToString();
         }
 
@@ -4270,7 +4293,7 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return _saveValue;
         }
 
@@ -4292,11 +4315,11 @@ namespace StarcraftEPDTriggers {
         }
 
         public int getIndex() {
-            if(this == Ore) {
+            if (this == Ore) {
                 return 0;
-            } else if(this == Gas) {
+            } else if (this == Gas) {
                 return 1;
-            } else if(this == OreAndGas) {
+            } else if (this == OreAndGas) {
                 return 2;
             }
             throw new NotImplementedException();
@@ -4306,7 +4329,7 @@ namespace StarcraftEPDTriggers {
             return new TriggerDefinitionGeneralDef<Resources>(getter, setter, getDefault, AllResources);
         }
 
-        public static Resources[] AllResources = new Resources[] { Ore, Gas, OreAndGas};
+        public static Resources[] AllResources = new Resources[] { Ore, Gas, OreAndGas };
 
     }
 
@@ -4324,14 +4347,14 @@ namespace StarcraftEPDTriggers {
         }
 
         public static RemappingIndexDef getByIndex(int index) {
-            if(index < AllRemappingIndexes.Length) {
+            if (index < AllRemappingIndexes.Length) {
                 return AllRemappingIndexes[index];
             }
             throw new NotImplementedException();
         }
 
         public int getMaxValue() {
-            return AllRemappingIndexes.Length-1;
+            return AllRemappingIndexes.Length - 1;
         }
 
         private RemappingIndexDef(int index, string name) {
@@ -4358,7 +4381,7 @@ namespace StarcraftEPDTriggers {
         };
     }
 
-    public class RightClickAction :Gettable<RightClickAction> {
+    public class RightClickAction : Gettable<RightClickAction> {
 
 
         private int _index;
@@ -4434,7 +4457,7 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return ToString();
         }
 
@@ -4460,8 +4483,8 @@ namespace StarcraftEPDTriggers {
         }
 
         public int getIndex() {
-            for(int i = 0; i < AllScoreBoards.Length; i++) {
-                if(AllScoreBoards[i]== this) {
+            for (int i = 0; i < AllScoreBoards.Length; i++) {
+                if (AllScoreBoards[i] == this) {
                     return i;
                 }
             }
@@ -4472,7 +4495,7 @@ namespace StarcraftEPDTriggers {
             return new TriggerDefinitionGeneralDef<ScoreBoard>(getter, setter, getDefault, AllScoreBoards);
         }
 
-        public static ScoreBoard[] AllScoreBoards = new ScoreBoard[] { Buildings, Custom, Kills, KillsAndRazings, Razings, Total, Units, UnitsAndBuildings};
+        public static ScoreBoard[] AllScoreBoards = new ScoreBoard[] { Buildings, Custom, Kills, KillsAndRazings, Razings, Total, Units, UnitsAndBuildings };
     }
 
     public class SCTechDef {
@@ -4594,7 +4617,7 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return ToString();
         }
 
@@ -6242,7 +6265,7 @@ namespace StarcraftEPDTriggers {
         };
     }
 
-    public class Sprite130Def :Gettable<Sprite130Def> {
+    public class Sprite130Def : Gettable<Sprite130Def> {
         private int _index;
         private string _name;
 
@@ -6282,9 +6305,9 @@ namespace StarcraftEPDTriggers {
             get {
                 if (_allSprites == null) {
                     int off = 130;
-                    _allSprites = new Sprite130Def[SpriteDef.AllSprites.Length-off];
+                    _allSprites = new Sprite130Def[SpriteDef.AllSprites.Length - off];
                     for (int i = 0; i < _allSprites.Length; i++) {
-                        _allSprites[i] = new Sprite130Def(i, SpriteDef.AllSprites[off+i]);
+                        _allSprites[i] = new Sprite130Def(i, SpriteDef.AllSprites[off + i]);
                     }
                 }
                 return _allSprites;
@@ -6899,11 +6922,55 @@ namespace StarcraftEPDTriggers {
         }
 
         public override string ToString() {
-            return _value;
+            return unescape(_value);
         }
 
-        public string ToSaveString() {
-            return "\"" + ToString() + "\"";
+        private String escape(String str) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0, o = str.Length; i < o; i++) {
+                char chr = str[i];
+                if (chr == '\r') {
+                    sb.Append('\\');
+                    sb.Append('r');
+                } else if (chr == '\n') {
+                    sb.Append('\\');
+                    sb.Append('n');
+                } else if (chr == '\t') {
+                    sb.Append('\\');
+                    sb.Append('t');
+                } else {
+                    sb.Append(chr);
+                }
+            }
+            return sb.ToString();
+        }
+
+        private String unescape(String str) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0, o = str.Length; i < o; i++) {
+                char chr = str[i];
+                if (chr == '\\') {
+                    if (i + 1 < o) { // Not last character
+                        i++;
+                        chr = str[i];
+                        if (chr == 'r') {
+                            chr = '\r';
+                        } else if (chr == 'n') {
+                            chr = '\n';
+                        } else if (chr == 't') {
+                            chr = '\t';
+                        } else {
+                            sb.Append('\\');
+                        }
+                    }
+                }
+                sb.Append(chr);
+            }
+            return sb.ToString();
+        }
+
+        public string ToSaveString(bool readable) {
+            return "\"" + escape(_value) + "\"";
         }
     }
 
@@ -6942,8 +7009,12 @@ namespace StarcraftEPDTriggers {
             return SwitchName.ToString();
         }
 
-        public string ToSaveString() {
-            return _index.ToString();
+        public string ToSaveString(bool readable) {
+            if (readable) {
+                return "\"" + _name + "\"";
+            } else {
+                return _index.ToString();
+            }
         }
 
         public int getMaxValue() {
@@ -6981,7 +7052,7 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return ToString();
         }
 
@@ -7030,7 +7101,7 @@ namespace StarcraftEPDTriggers {
             return _value;
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return ToString();
         }
 
@@ -7678,11 +7749,15 @@ namespace StarcraftEPDTriggers {
         }
 
         public TriggerDefinitionPart getTriggerPart(Func<UnitDef> getter, Action<UnitDef> setter, Func<UnitDef> getDefault) {
-            return new TriggerDefinitionGeneralDef<UnitDef>(getter, setter,getDefault, AllUnits);
+            return new TriggerDefinitionGeneralDef<UnitDef>(getter, setter, getDefault, AllUnits);
         }
 
-        public string ToSaveString() {
-            return UnitID.ToString();
+        public string ToSaveString(bool readable) {
+            if (readable) {
+                return "\"" + _customName + "\"";
+            } else {
+                return UnitID.ToString();
+            }
         }
 
         private UnitDef(int id) {
@@ -7944,7 +8019,7 @@ namespace StarcraftEPDTriggers {
     public class UnitHPDef : Gettable<UnitHPDef>, SaveableItem {
 
         private int _value;
-        
+
         public int getIndex() {
             return _value;
         }
@@ -7982,7 +8057,7 @@ namespace StarcraftEPDTriggers {
             return (_value / 256).ToString();
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return _value.ToString();
         }
     }
@@ -8029,8 +8104,12 @@ namespace StarcraftEPDTriggers {
             return new TriggerDefinitionGeneralDef<UnitVanillaDef>(getter, setter, getDefault, AllUnits);
         }
 
-        public string ToSaveString() {
-            return UnitID.ToString();
+        public string ToSaveString(bool readable) {
+            if (readable) {
+                return "\"" + UnitName + "\"";
+            } else {
+                return UnitID.ToString();
+            }
         }
 
         private UnitVanillaDef(int id) {
@@ -8306,7 +8385,7 @@ namespace StarcraftEPDTriggers {
             return _amount.ToString();
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             return _amount == -1 ? "All" : _amount.ToString();
         }
 
@@ -8520,7 +8599,7 @@ namespace StarcraftEPDTriggers {
 
     }
 
-    public class WeaponDef :Gettable<WeaponDef> {
+    public class WeaponDef : Gettable<WeaponDef> {
 
         private int _index;
         private string _name;
@@ -8604,7 +8683,7 @@ namespace StarcraftEPDTriggers {
             "Flame Thrower (Normal)",
             "Flame Thrower (Gui Montag)",
             "Arclite Shock Cannon (Normal)",
-            "ARclite Shock Cannon (Admund Duke)",
+            "Arclite Shock Cannon (Admund Duke)",
             "Longbolt Missiles",
             "Yamato Gun",
             "Nuclear Missile",
@@ -8819,7 +8898,7 @@ namespace StarcraftEPDTriggers {
             return new TriggerDefinitionWeaponTargetFlagsDef(getter, setter, getDefault);
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             throw new NotImplementedException();
         }
 
@@ -9359,6 +9438,84 @@ namespace StarcraftEPDTriggers {
             "Flingy.dat Control",
             "Partially Mobile, Weapon",
             "IScript.bin Control"
+        };
+    }
+
+    public class DrawingFunctionDef : Gettable<DrawingFunctionDef> {
+
+        private int _index;
+        private string _name;
+
+        public int DrawingFunctionID { get { return _index; } }
+
+        public string DrawingFunctionName { get { return _name; } }
+
+        public static DrawingFunctionDef getByIndex(int index) {
+            if (index < AllDrawingFunctions.Length) {
+                return AllDrawingFunctions[index];
+            }
+            throw new NotImplementedException();
+        }
+
+        public override string ToString() {
+            return DrawingFunctionName;
+        }
+
+        public int getMaxValue() {
+            return AllDrawingFunctions.Length - 1;
+        }
+
+        public int getIndex() {
+            return DrawingFunctionID;
+        }
+
+
+        public TriggerDefinitionPart getTriggerPart(Func<DrawingFunctionDef> getter, Action<DrawingFunctionDef> setter, Func<DrawingFunctionDef> getDefault) {
+            return new TriggerDefinitionGeneralDef<DrawingFunctionDef>(getter, setter, getDefault, AllDrawingFunctions);
+        }
+
+        private DrawingFunctionDef(int index) {
+            _index = index;
+            if (index < _Defs.Length) {
+                _name = _Defs[index];
+            } else {
+                _name = "Invalid effect";
+            }
+        }
+
+        public static DrawingFunctionDef[] AllDrawingFunctions {
+            get {
+                if (_allDrawingFunctions == null) {
+                    _allDrawingFunctions = new DrawingFunctionDef[_Defs.Length];
+                    for (int i = 0; i < _Defs.Length; i++) {
+                        _allDrawingFunctions[i] = new DrawingFunctionDef(i);
+                    }
+                }
+                return _allDrawingFunctions;
+            }
+        }
+
+        private static DrawingFunctionDef[] _allDrawingFunctions;
+
+        private static readonly string[] _Defs = {
+            "Normal Draw",
+            "Unknown 1",
+            "Enemy Unit Cloak (+spell)",
+            "Own Unit Cloak (+speel)",
+            "Ally Unit Cloak",
+            "Ally Unit Cloak (+spell)",
+            "Own Unit Cloak (draw only)",
+            "(crash)",
+            "EMP Shockwave",
+            "Use Remapping",
+            "Shadow/FoW(dark.pcx)",
+            "Unknown 11",
+            "Warp Flash (SEdit crash)",
+            "Don't Mirror Frames",
+            "Unknown 14",
+            "Hide Gfx, Show Size Rect",
+            "Hallucination",
+            "Warp Flash",
         };
     }
 }

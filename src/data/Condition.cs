@@ -11,27 +11,27 @@ namespace StarcraftEPDTriggers {
         public Condition(Parser parser, int num) : base(parser, num) { }
 
         public override string ToString() {
-            return ToSaveString();
+            return ToSaveString(false);
         }
 
-        public virtual string ToSaveString() {
+        public virtual string ToSaveString(bool readable) {
             StringBuilder sb = new StringBuilder();
             if (!this.isEnabled()) {
                 sb.Append(";");
             }
             if (this is GenericCondition) {
-                SaveableItem[] parts = ((GenericCondition)this).getUsefulDefinitionParts();
-                sb.Append(((GenericCondition)this).Name + "(");
+                SaveableItem[] parts = ((GenericCondition) this).getUsefulDefinitionParts();
+                sb.Append(((GenericCondition) this).Name + "(");
                 for (int i = 0; i < parts.Length; i++) {
                     SaveableItem part = parts[i];
-                    sb.Append(part.ToSaveString());
+                    sb.Append(part.ToSaveString(readable));
                     if (i != parts.Length - 1) {
                         sb.Append(", ");
                     }
                 }
                 sb.Append(");");
-            } else if(this is EPDCondition) {
-                EPDCondition epd = (EPDCondition)this;
+            } else if (this is EPDCondition) {
+                EPDCondition epd = (EPDCondition) this;
                 sb.Append(epd.ToString());
             } else {
                 throw new NotImplementedException();
@@ -41,7 +41,7 @@ namespace StarcraftEPDTriggers {
     }
 
     public class GeneralTriggerContentInternalCalculator {
-        
+
         private TriggerDefinitionPart[] visualParts;
         private SaveableItem[] _contents;
         private string _name;
@@ -61,11 +61,11 @@ namespace StarcraftEPDTriggers {
                 int localCounter = counter;
                 TriggerContentTypeDescriptor type = types[i];
                 if (type is TriggerContentTypeDescriptorVisual) {
-                    string label = ((TriggerContentTypeDescriptorVisual)type).Content;
+                    string label = ((TriggerContentTypeDescriptorVisual) type).Content;
                     if (label.Equals("\n")) {
                         visualParts[i] = new TriggerDefinitionNewLine();
                     } else {
-                        visualParts[i] = (TriggerDefinitionPart)TriggerContentType.VISUAL_LABEL(label).Read(null, 0);
+                        visualParts[i] = (TriggerDefinitionPart) TriggerContentType.VISUAL_LABEL(label).Read(null, 0);
                     }
                 } else {
                     _contents[_textMapping[counter]] = type.Read(content, _textMapping[counter]);
@@ -83,7 +83,7 @@ namespace StarcraftEPDTriggers {
             return _contents[index];
         }
 
-        public GeneralTriggerContentInternalCalculator(string name,int[] textMapping, Func<TriggerDefinitionPart[], TriggerDefinitionPart[]> remapVisuals, Func<SaveableItem[], SaveableItem[]> remapSaveables, GeneralTriggerContentInternalCalculator theOther) {
+        public GeneralTriggerContentInternalCalculator(string name, int[] textMapping, Func<TriggerDefinitionPart[], TriggerDefinitionPart[]> remapVisuals, Func<SaveableItem[], SaveableItem[]> remapSaveables, GeneralTriggerContentInternalCalculator theOther) {
             _name = name;
             _textMapping = textMapping;
             _contents = remapSaveables(theOther._contents);
@@ -96,7 +96,7 @@ namespace StarcraftEPDTriggers {
 
         public SaveableItem[] getUsefulDefinitionParts() {
             SaveableItem[] ret = new SaveableItem[_textMapping.Length];
-            for (int i=0;i<_textMapping.Length;i++) {
+            for (int i = 0; i < _textMapping.Length; i++) {
                 ret[i] = _contents[i];
             }
             return ret;
@@ -116,7 +116,7 @@ namespace StarcraftEPDTriggers {
         public T get<T>(int index) where T : SaveableItem {
             object obj = _obj.getRawObject(index);
             if (obj is T) {
-                return (T)obj;
+                return (T) obj;
             }
             throw new NotImplementedException();
         }
@@ -186,7 +186,7 @@ namespace StarcraftEPDTriggers {
         }
 
     }
-    
+
     class ConditionAlways : GenericCondition {
 
         public ConditionAlways(Parser parser) : base(parser, "Always", getComponents(), getUsefulMapping(), getTextMapping(), getTrigMapping()) { }
@@ -848,7 +848,7 @@ namespace StarcraftEPDTriggers {
 
     public class ConditionCustom : GenericCondition {
 
-        
+
         public ConditionCustom(Parser parser) : base(parser, "Custom", getComponents(), getUsefulMapping(), getTextMapping(), getTrigMapping()) { }
 
         public static TriggerContentTypeDescriptor[] getComponents() {

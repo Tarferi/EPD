@@ -30,7 +30,7 @@ namespace StarcraftEPDTriggers.src {
         public bool IsSelected { set { _sel = value; _hover = false; selChanged(value); } get { return _sel; } }
         public bool Hover { set { _hover = value; InvalidateVisual(); } get { return _hover; } }
 
-        
+
         public static readonly Brush hoverBrush = new SolidColorBrush(Color.FromArgb(80, 100, 100, 255));
         public static readonly Brush selBrush = new SolidColorBrush(Color.FromArgb(200, 100, 255, 100));
         public static readonly Brush defBrush = new SolidColorBrush(Colors.Transparent);
@@ -40,7 +40,7 @@ namespace StarcraftEPDTriggers.src {
         public static readonly Brush selBrushRaw = new SolidColorBrush(Color.FromArgb(100, 133, 255, 133));
 
         private void selChanged(bool newValue) {
-            if(newValue) {
+            if (newValue) {
                 Background = selBrush;
             } else {
                 Background = defBrush;
@@ -112,7 +112,7 @@ namespace StarcraftEPDTriggers.src {
 
         public BitmapImage Image { get { return _inner.Image; } }
 
-     
+
 
     }
 
@@ -131,7 +131,7 @@ namespace StarcraftEPDTriggers.src {
             drawingContext.DrawImage(_img, rect);
             if (_source.IsSelected) {
                 drawingContext.DrawRectangle(BitmapImageX.selBrushRaw, pen, rect);
-            } else if(_source.Hover) {
+            } else if (_source.Hover) {
                 drawingContext.DrawRectangle(BitmapImageX.hoverBrushRaw, pen, rect);
             }
         }
@@ -220,7 +220,7 @@ namespace StarcraftEPDTriggers.src {
             _regenCB = regenCallback;
             return this;
         }
-        
+
         protected TriggerDefinitionPart() {
             _isEditable = true;
             _isRegenerating = false;
@@ -241,14 +241,14 @@ namespace StarcraftEPDTriggers.src {
 
         protected abstract void updateDisplayedValue();
 
-        protected void renderColoredText(RichTextBox g, string text, int hexColor,int hexColorSelected, bool allowNewLine) {
-            Brush color = new SolidColorBrush(Color.FromRgb((byte)((hexColor >> 16) & 0xff), (byte)((hexColor >> 8) & 0xff), (byte)((hexColor >> 0) & 0xff)));
-            Brush colorSel = new SolidColorBrush(Color.FromRgb((byte)((hexColorSelected >> 16) & 0xff), (byte)((hexColorSelected >> 8) & 0xff), (byte)((hexColorSelected >> 0) & 0xff)));
+        protected void renderColoredText(RichTextBox g, string text, int hexColor, int hexColorSelected, bool allowNewLine) {
+            Brush color = new SolidColorBrush(Color.FromRgb((byte) ((hexColor >> 16) & 0xff), (byte) ((hexColor >> 8) & 0xff), (byte) ((hexColor >> 0) & 0xff)));
+            Brush colorSel = new SolidColorBrush(Color.FromRgb((byte) ((hexColorSelected >> 16) & 0xff), (byte) ((hexColorSelected >> 8) & 0xff), (byte) ((hexColorSelected >> 0) & 0xff)));
 
             Inline run = new Run(allowNewLine ? text : text.Replace("\r", "\\r").Replace("\n", "\\n"));
             run.BaselineAlignment = BaselineAlignment.Center;
             run.Foreground = color;
-            ((Paragraph)g.Document.Blocks.LastBlock).Inlines.Add(run);
+            ((Paragraph) g.Document.Blocks.LastBlock).Inlines.Add(run);
             Properties.SelectionChanged += (bool isSelected) => {
                 if (isSelected) {
                     run.Foreground = colorSel;
@@ -343,7 +343,7 @@ namespace StarcraftEPDTriggers.src {
             Properties = g;
             _iuc = new InlineUIContainer();
             updateDisplayedValue();
-            ((Paragraph)g.g.Document.Blocks.LastBlock).Inlines.Add(_iuc);
+            ((Paragraph) g.g.Document.Blocks.LastBlock).Inlines.Add(_iuc);
         }
 
         protected abstract UIElement getPlaceholderObject();
@@ -387,7 +387,7 @@ namespace StarcraftEPDTriggers.src {
                 }
                 */
                 _reset.Visibility = isCurrentValueDefault() ? Visibility.Collapsed : Visibility.Visible;
-                
+
             }
         }
 
@@ -404,7 +404,7 @@ namespace StarcraftEPDTriggers.src {
                 _reset.Click += delegate {
                     Reset(true);
                 };
-                ((Paragraph)g.g.Document.Blocks.LastBlock).Inlines.Add(_reset);
+                ((Paragraph) g.g.Document.Blocks.LastBlock).Inlines.Add(_reset);
                 updateButton();
             }
         }
@@ -416,7 +416,7 @@ namespace StarcraftEPDTriggers.src {
         private Label _lbl;
 
         public TriggerDefinitionClickableLabel(Func<string> getter) {
-            _getter =()=>getter().Replace("_","__");
+            _getter = () => getter().Replace("_", "__");
         }
 
         private bool isSel = false;
@@ -447,7 +447,7 @@ namespace StarcraftEPDTriggers.src {
             if (IsEditable) {
                 lbl.Cursor = Cursors.Hand;
             }
-            lbl.Content = "'"+_getter()+"'";
+            lbl.Content = "'" + _getter() + "'";
             _lbl = lbl;
             return lbl;
         }
@@ -506,7 +506,7 @@ namespace StarcraftEPDTriggers.src {
                 _reset.Click += delegate {
                     Reset(true);
                 };
-                ((Paragraph)g.g.Document.Blocks.LastBlock).Inlines.Add(_reset);
+                ((Paragraph) g.g.Document.Blocks.LastBlock).Inlines.Add(_reset);
                 updateButton();
             }
         }
@@ -524,7 +524,7 @@ namespace StarcraftEPDTriggers.src {
 
         protected override void linkUnclicked(UIElement givenElement) {
             ComboBox combo = givenElement as ComboBox;
-            if(combo.SelectedIndex >=0) {
+            if (combo.SelectedIndex >= 0) {
                 T selectedItem = (T) combo.SelectedItem;
                 _setter(selectedItem);
                 ValueChanged();
@@ -551,7 +551,7 @@ namespace StarcraftEPDTriggers.src {
 
         protected override UIElement getRealElement() {
             ComboBox combo = new ComboBox();
-            foreach(T obj in givenArray) {
+            foreach (T obj in givenArray) {
                 combo.Items.Add(obj);
             }
             combo.IsReadOnly = false;
@@ -597,7 +597,7 @@ namespace StarcraftEPDTriggers.src {
         private string _text;
         private int _color;
 
-        public TriggerDefinitionLabel(string text) :this(text, 0 ){ }
+        public TriggerDefinitionLabel(string text) : this(text, 0) { }
 
         public TriggerDefinitionLabel(string text, int color) {
             _text = text;
@@ -609,7 +609,7 @@ namespace StarcraftEPDTriggers.src {
             renderColoredText(g.g, _text, _color, _color, true);
         }
 
-        public string ToSaveString() {
+        public string ToSaveString(bool readable) {
             throw new NotImplementedException();
         }
 
@@ -618,19 +618,19 @@ namespace StarcraftEPDTriggers.src {
         }
 
         protected override void updateDisplayedValue() {
-            
+
         }
     }
 
     public class TriggerDefinitionNewLine : TriggerDefinitionPart {
-        
+
         public override void render(TriggerDefinitionPartProperties g) {
             Properties = g;
             renderColoredText(g.g, "\n", 0, 0, true);
         }
 
         protected override void updateDisplayedValue() {
-            
+
         }
     }
 
@@ -659,7 +659,7 @@ namespace StarcraftEPDTriggers.src {
         }
 
         protected override void updateDisplayedValue() {
-            
+
         }
     }
 
@@ -674,7 +674,7 @@ namespace StarcraftEPDTriggers.src {
         }
 
         protected override void updateDisplayedValue() {
-            
+
         }
     }
 
@@ -689,19 +689,19 @@ namespace StarcraftEPDTriggers.src {
 
         public override void render(TriggerDefinitionPartProperties g) {
             Properties = g;
-            if(Properties.HideCheckBox && !overridePropertiesHideCheckbox) {
+            if (Properties.HideCheckBox && !overridePropertiesHideCheckbox) {
                 return;
             }
             CheckBox cb = new CheckBox();
             cb.Content = _text;
-            cb.Checked += delegate { _setter(true);ValueChanged(); };
+            cb.Checked += delegate { _setter(true); ValueChanged(); };
             cb.Unchecked += delegate { _setter(false); ValueChanged(); };
             cb.IsChecked = _getter();
             cb.Margin = new Thickness(5, 0, 0, 0);
             cb.VerticalAlignment = VerticalAlignment.Center;
             cb.VerticalContentAlignment = VerticalAlignment.Center;
             cb.Height = 24;
-            ((Paragraph)g.g.Document.Blocks.LastBlock).Inlines.Add(cb);
+            ((Paragraph) g.g.Document.Blocks.LastBlock).Inlines.Add(cb);
             _cb = cb;
         }
 
@@ -763,7 +763,7 @@ namespace StarcraftEPDTriggers.src {
                     _setter(_getDefault());
                     updateDisplayedValue();
                 };
-                ((Paragraph)g.g.Document.Blocks.LastBlock).Inlines.Add(_reset);
+                ((Paragraph) g.g.Document.Blocks.LastBlock).Inlines.Add(_reset);
                 updateButton();
             }
         }
@@ -804,7 +804,7 @@ namespace StarcraftEPDTriggers.src {
                     ValueChanged();
                     updateButton();
                 };
-                ((Paragraph)g.g.Document.Blocks.LastBlock).Inlines.Add(_reset);
+                ((Paragraph) g.g.Document.Blocks.LastBlock).Inlines.Add(_reset);
                 updateButton();
             }
         }
@@ -883,11 +883,11 @@ namespace StarcraftEPDTriggers.src {
             return _getter().getIndex() == _getDefault().getIndex();
         }
 
-        public TriggerDefinitionGeneralIconsList(Func<TYPE> getter, Action<TYPE> setter, Func<TYPE> getDefault, BitmapImageX[] allImages, int columns) : base(()=>getter().getImage()) {
-            _setter = (TYPE valu)=> { setter(valu);ValueChanged(); updateButton(); };
+        public TriggerDefinitionGeneralIconsList(Func<TYPE> getter, Action<TYPE> setter, Func<TYPE> getDefault, BitmapImageX[] allImages, int columns) : base(() => getter().getImage()) {
+            _setter = (TYPE valu) => { setter(valu); ValueChanged(); updateButton(); };
             _getter = getter;
             _getDefault = getDefault;
-            setup(() => _getter().getImage(), (BitmapImageX img) => { _setter((TYPE)img.GetValue()); }, () => _getDefault().getImage(), allImages);
+            setup(() => _getter().getImage(), (BitmapImageX img) => { _setter((TYPE) img.GetValue()); }, () => _getDefault().getImage(), allImages);
             ElementsPerColumn = columns;
         }
     }
@@ -901,7 +901,7 @@ namespace StarcraftEPDTriggers.src {
             new WndUnitProperties(this);
         }
 
-        public TriggerDefinitionPropertiesDef(Func<PropertiesDef> getter, Action<PropertiesDef> setter):base(()=>getter().ToString()) {
+        public TriggerDefinitionPropertiesDef(Func<PropertiesDef> getter, Action<PropertiesDef> setter) : base(() => getter().ToString()) {
             _getter = getter;
             _setter = setter;
         }
@@ -911,10 +911,10 @@ namespace StarcraftEPDTriggers.src {
         }
 
         internal void set(object result) {
-            if(result == null) {
+            if (result == null) {
                 return;
             } else {
-                _setter(new PropertiesDef((int)result));
+                _setter(new PropertiesDef((int) result));
                 ValueChanged();
             }
         }
@@ -953,7 +953,7 @@ namespace StarcraftEPDTriggers.src {
         private Func<AdvancedPropertiesDef> _getDefault;
 
 
-        public TriggerDefinitionAdvancedPropertiesDef(Func<AdvancedPropertiesDef> getter, Action<AdvancedPropertiesDef> setter, Func<AdvancedPropertiesDef> getDefault) :base(()=>getter().ToString()) {
+        public TriggerDefinitionAdvancedPropertiesDef(Func<AdvancedPropertiesDef> getter, Action<AdvancedPropertiesDef> setter, Func<AdvancedPropertiesDef> getDefault) : base(() => getter().ToString()) {
             _getter = getter;
             _setter = (AdvancedPropertiesDef def) => { setter(def); ValueChanged(); updateButton(); };
             _getDefault = getDefault;
@@ -977,7 +977,7 @@ namespace StarcraftEPDTriggers.src {
         private Func<UnitsQuantity> _getter;
         private Action<UnitsQuantity> _setter;
 
-        public TriggerDefinitionQuantAmount(Func<UnitsQuantity> getter, Action<UnitsQuantity> setter) : base(()=>getter().Amount) {
+        public TriggerDefinitionQuantAmount(Func<UnitsQuantity> getter, Action<UnitsQuantity> setter) : base(() => getter().Amount) {
             _getter = getter;
             _setter = (UnitsQuantity val) => { setter(val); ValueChanged(); };
         }
@@ -987,10 +987,10 @@ namespace StarcraftEPDTriggers.src {
         }
 
         internal void set(object result) {
-            if(result == null) { // Cancel clicked
+            if (result == null) { // Cancel clicked
                 return;
             } else {
-                int value = (int)result;
+                int value = (int) result;
                 _setter(new UnitsQuantity(value));
             }
         }
@@ -1005,7 +1005,7 @@ namespace StarcraftEPDTriggers.src {
         private Func<PercentageDef> _getter;
         private Action<PercentageDef> _setter;
 
-        public TriggerDefinitionPercentage(Func<PercentageDef> getter, Action<PercentageDef> setter) : base(()=>getter().ToString()) {
+        public TriggerDefinitionPercentage(Func<PercentageDef> getter, Action<PercentageDef> setter) : base(() => getter().ToString()) {
             _getter = getter;
             _setter = (PercentageDef val) => { setter(val); ValueChanged(); };
         }
@@ -1023,10 +1023,10 @@ namespace StarcraftEPDTriggers.src {
         private Action<StringDef> _setter;
 
         protected override void linkClicked(UIElement editableElement) {
-            new WndStringPropertyEdit(()=>_getter().ToString(), ()=>true, (string str, bool b)=>{ _setter(new StringDef(str)); });
+            new WndStringPropertyEdit(() => _getter().ToString(), () => true, (string str, bool b) => { _setter(new StringDef(str)); });
         }
 
-        public TriggerDefinitionInputText(Func<StringDef> getter, Action<StringDef> setter) : base(()=> { return getter().ToString().Length == 0 ? "   " : getter().ToString(); }) {
+        public TriggerDefinitionInputText(Func<StringDef> getter, Action<StringDef> setter) : base(() => { return getter().ToString().Length == 0 ? "   " : getter().ToString(); }) {
             _getter = getter;
             _setter = (StringDef val) => { setter(val); ValueChanged(); };
         }
@@ -1082,7 +1082,7 @@ namespace StarcraftEPDTriggers.src {
 
 
             int num;
-            if(int.TryParse(input.ToString(), out num)) {
+            if (int.TryParse(input.ToString(), out num)) {
                 IntDef def = new IntDef(num, false);
                 _setter(def);
             }
@@ -1092,7 +1092,7 @@ namespace StarcraftEPDTriggers.src {
         private Action<IntDef> _setter;
         private Func<IntDef> _getDefault;
 
-        public TriggerDefinitionIntAmount(Func<IntDef> getter, Action<IntDef> setter, Func<IntDef> getDefault) : base(()=> { return getter().ToString().Length == 0 ? "   " : getter().ToString(); }) {
+        public TriggerDefinitionIntAmount(Func<IntDef> getter, Action<IntDef> setter, Func<IntDef> getDefault) : base(() => { return getter().ToString().Length == 0 ? "   " : getter().ToString(); }) {
             _getter = getter;
             _getDefault = getDefault;
             _setter = (IntDef val) => { bool useHex = val.UseHex; setter(val); getter().UseHex = useHex; ValueChanged(); updateButton(); };
@@ -1102,7 +1102,7 @@ namespace StarcraftEPDTriggers.src {
         }
 
         protected override void linkUnclicked(UIElement givenElement) {
-            verifyAndSet(new StringDef(((TextBox)givenElement).Text), _setter);
+            verifyAndSet(new StringDef(((TextBox) givenElement).Text), _setter);
             base.linkUnclicked(givenElement);
         }
 
@@ -1216,7 +1216,7 @@ namespace StarcraftEPDTriggers.src {
         }
 
         public SwitchNameDef getSwitch(int index) {
-            return SwitchNameDef.getByIndex(tokens[index - 1].toInt());
+            return SwitchNameDef.getByIndex(tokens[index - 1].toSwitchInt());
         }
 
         public AIScriptDef getAIScript(int index) {
@@ -1264,7 +1264,7 @@ namespace StarcraftEPDTriggers.src {
         }
 
         public UnitVanillaDef getUnitDef(int index) {
-            return UnitVanillaDef.getByIndex(tokens[index - 1].toInt());
+            return UnitVanillaDef.getByIndex(tokens[index - 1].toUnitInt());
         }
     }
 
@@ -1330,31 +1330,31 @@ namespace StarcraftEPDTriggers.src {
         }
 
 
-        private static Func<string, TriggerContentTypeDescriptor> UnitsQuantity = (string name) => _get(name, (TriggerContent contents, int index) => new UnitsQuantity(contents.getInt(index, false).getIndex()), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionQuantAmount(() => (UnitsQuantity)getter(), (UnitsQuantity obj) => { setter(obj); }), StarcraftEPDTriggers.UnitsQuantity.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> Unit = (string name) => _get(name, (TriggerContent contents, int index) => contents.getUnitDef(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<UnitVanillaDef>(() => (UnitVanillaDef)getter(), (UnitVanillaDef obj) => { setter(obj); }, UnitVanillaDef.getDefaultValue, UnitVanillaDef.AllUnits), UnitVanillaDef.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> Location = (string name) => _get(name, (TriggerContent contents, int index) => contents.getLocationDef(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<LocationDef>(() => (LocationDef)getter(), (LocationDef obj) => { setter(obj); }, LocationDef.getDefaultValue, LocationDef.AllLocations), LocationDef.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> Player = (string name) => _get(name, (TriggerContent contents, int index) => contents.getPlayerDef(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<PlayerDef>(() => (PlayerDef)getter(), (PlayerDef obj) => { setter(obj); }, PlayerDef.getDefaultValue, PlayerDef.AllPlayers), PlayerDef.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> Properties = (string name) => _get(name, (TriggerContent contents, int index) => new PropertiesDef(contents.getInt(index, false).getIndex()), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionPropertiesDef(() => (PropertiesDef)getter(), (PropertiesDef obj) => { setter(obj); }), StarcraftEPDTriggers.PropertiesDef.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> Percentage = (string name) => _get(name, (TriggerContent contents, int index) => new PercentageDef(contents.getInt(index, false).getIndex()), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionPercentage(() => (PercentageDef)getter(), (PercentageDef obj) => { setter(obj); }), StarcraftEPDTriggers.PercentageDef.getDefaultValue(false));
-        private static Func<string, TriggerContentTypeDescriptor> String = (string name) => _get(name, (TriggerContent contents, int index) => contents.getString(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionInputText(() => (StringDef)getter(), (StringDef obj) => { setter(obj); }), new StringDef(name));
-        private static Func<string, TriggerContentTypeDescriptor> Int = (string name) => _get(name, (TriggerContent contents, int index) => contents.getInt(index, false), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionIntAmount(() => (IntDef)getter(), (IntDef obj) => { setter(obj); }, () => new IntDef(0, false)), IntDef.getDefaultValue(false));
+        private static Func<string, TriggerContentTypeDescriptor> UnitsQuantity = (string name) => _get(name, (TriggerContent contents, int index) => new UnitsQuantity(contents.getInt(index, false).getIndex()), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionQuantAmount(() => (UnitsQuantity) getter(), (UnitsQuantity obj) => { setter(obj); }), StarcraftEPDTriggers.UnitsQuantity.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> Unit = (string name) => _get(name, (TriggerContent contents, int index) => contents.getUnitDef(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<UnitVanillaDef>(() => (UnitVanillaDef) getter(), (UnitVanillaDef obj) => { setter(obj); }, UnitVanillaDef.getDefaultValue, UnitVanillaDef.AllUnits), UnitVanillaDef.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> Location = (string name) => _get(name, (TriggerContent contents, int index) => contents.getLocationDef(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<LocationDef>(() => (LocationDef) getter(), (LocationDef obj) => { setter(obj); }, LocationDef.getDefaultValue, LocationDef.AllLocations), LocationDef.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> Player = (string name) => _get(name, (TriggerContent contents, int index) => contents.getPlayerDef(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<PlayerDef>(() => (PlayerDef) getter(), (PlayerDef obj) => { setter(obj); }, PlayerDef.getDefaultValue, PlayerDef.AllPlayers), PlayerDef.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> Properties = (string name) => _get(name, (TriggerContent contents, int index) => new PropertiesDef(contents.getInt(index, false).getIndex()), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionPropertiesDef(() => (PropertiesDef) getter(), (PropertiesDef obj) => { setter(obj); }), StarcraftEPDTriggers.PropertiesDef.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> Percentage = (string name) => _get(name, (TriggerContent contents, int index) => new PercentageDef(contents.getInt(index, false).getIndex()), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionPercentage(() => (PercentageDef) getter(), (PercentageDef obj) => { setter(obj); }), StarcraftEPDTriggers.PercentageDef.getDefaultValue(false));
+        private static Func<string, TriggerContentTypeDescriptor> String = (string name) => _get(name, (TriggerContent contents, int index) => contents.getString(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionInputText(() => (StringDef) getter(), (StringDef obj) => { setter(obj); }), new StringDef(name));
+        private static Func<string, TriggerContentTypeDescriptor> Int = (string name) => _get(name, (TriggerContent contents, int index) => contents.getInt(index, false), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionIntAmount(() => (IntDef) getter(), (IntDef obj) => { setter(obj); }, () => new IntDef(0, false)), IntDef.getDefaultValue(false));
 
-        private static Func<string, TriggerContentTypeDescriptor> Alliance = (string name) => _get(name, (TriggerContent contents, int index) => contents.getAlliance(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<AllianceDef>(() => (StarcraftEPDTriggers.AllianceDef)getter(), (StarcraftEPDTriggers.AllianceDef toSet) => { setter(toSet); }, StarcraftEPDTriggers.AllianceDef.getDefaultValue, StarcraftEPDTriggers.AllianceDef.AllAlliances), StarcraftEPDTriggers.AllianceDef.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> SwitchSetState = (string name) => _get(name, (TriggerContent contents, int index) => contents.getSwitchSetState(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<SwitchSetState>(() => (StarcraftEPDTriggers.SwitchSetState)getter(), (StarcraftEPDTriggers.SwitchSetState toSet) => { setter(toSet); }, StarcraftEPDTriggers.SwitchSetState.getDefaultValue, StarcraftEPDTriggers.SwitchSetState.AllStates), StarcraftEPDTriggers.SwitchSetState.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> EnableState = (string name) => _get(name, (TriggerContent contents, int index) => contents.getEnableState(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<EnableState>(() => (StarcraftEPDTriggers.EnableState)getter(), (StarcraftEPDTriggers.EnableState toSet) => { setter(toSet); }, StarcraftEPDTriggers.EnableState.getDefaultValue, StarcraftEPDTriggers.EnableState.AllStates), StarcraftEPDTriggers.EnableState.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> SetQuantifier = (string name) => _get(name, (TriggerContent contents, int index) => contents.getSetQuantifier(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<SetQuantifier>(() => (StarcraftEPDTriggers.SetQuantifier)getter(), (StarcraftEPDTriggers.SetQuantifier toSet) => { setter(toSet); }, StarcraftEPDTriggers.SetQuantifier.getDefaultValue, StarcraftEPDTriggers.SetQuantifier.AllQuantifiers), StarcraftEPDTriggers.SetQuantifier.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> Order = (string name) => _get(name, (TriggerContent contents, int index) => contents.getOrder(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<Order>(() => (StarcraftEPDTriggers.Order)getter(), (StarcraftEPDTriggers.Order toSet) => { setter(toSet); }, StarcraftEPDTriggers.Order.getDefaultValue, StarcraftEPDTriggers.Order.AllOrders), StarcraftEPDTriggers.Order.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> MessageType = (string name) => _get(name, (TriggerContent contents, int index) => contents.getMessageType(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<MessageType>(() => (StarcraftEPDTriggers.MessageType)getter(), (StarcraftEPDTriggers.MessageType toSet) => { setter(toSet); }, StarcraftEPDTriggers.MessageType.getDefaultValue, StarcraftEPDTriggers.MessageType.AllDisplays), StarcraftEPDTriggers.MessageType.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> SwitchState = (string name) => _get(name, (TriggerContent contents, int index) => contents.getSwitchState(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<SwitchState>(() => (StarcraftEPDTriggers.SwitchState)getter(), (StarcraftEPDTriggers.SwitchState toSet) => { setter(toSet); }, StarcraftEPDTriggers.SwitchState.getDefaultValue, StarcraftEPDTriggers.SwitchState.AllStates), StarcraftEPDTriggers.SwitchState.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> Quantifier = (string name) => _get(name, (TriggerContent contents, int index) => contents.getQuantifier(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<Quantifier>(() => (StarcraftEPDTriggers.Quantifier)getter(), (StarcraftEPDTriggers.Quantifier toSet) => { setter(toSet); }, StarcraftEPDTriggers.Quantifier.getDefaultValue, StarcraftEPDTriggers.Quantifier.AllQuantifieres), StarcraftEPDTriggers.Quantifier.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> Resources = (string name) => _get(name, (TriggerContent contents, int index) => contents.getResources(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<Resources>(() => (StarcraftEPDTriggers.Resources)getter(), (StarcraftEPDTriggers.Resources toSet) => { setter(toSet); }, StarcraftEPDTriggers.Resources.getDefaultValue, StarcraftEPDTriggers.Resources.AllResources), StarcraftEPDTriggers.Resources.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> ScoreBoard = (string name) => _get(name, (TriggerContent contents, int index) => contents.getScoreBoard(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<ScoreBoard>(() => (StarcraftEPDTriggers.ScoreBoard)getter(), (StarcraftEPDTriggers.ScoreBoard toSet) => { setter(toSet); }, StarcraftEPDTriggers.ScoreBoard.getDefaultValue, StarcraftEPDTriggers.ScoreBoard.AllScoreBoards), StarcraftEPDTriggers.ScoreBoard.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> Address = (string name) => _get(name, (TriggerContent contents, int index) => contents.getInt(index, true), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionIntAmount(() => { IntDef val = (IntDef)getter(); val.UseHex = true; return val; }, (IntDef obj) => { setter(obj); }, () => new IntDef(0, true)), StarcraftEPDTriggers.IntDef.getDefaultValue(true));
+        private static Func<string, TriggerContentTypeDescriptor> Alliance = (string name) => _get(name, (TriggerContent contents, int index) => contents.getAlliance(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<AllianceDef>(() => (StarcraftEPDTriggers.AllianceDef) getter(), (StarcraftEPDTriggers.AllianceDef toSet) => { setter(toSet); }, StarcraftEPDTriggers.AllianceDef.getDefaultValue, StarcraftEPDTriggers.AllianceDef.AllAlliances), StarcraftEPDTriggers.AllianceDef.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> SwitchSetState = (string name) => _get(name, (TriggerContent contents, int index) => contents.getSwitchSetState(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<SwitchSetState>(() => (StarcraftEPDTriggers.SwitchSetState) getter(), (StarcraftEPDTriggers.SwitchSetState toSet) => { setter(toSet); }, StarcraftEPDTriggers.SwitchSetState.getDefaultValue, StarcraftEPDTriggers.SwitchSetState.AllStates), StarcraftEPDTriggers.SwitchSetState.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> EnableState = (string name) => _get(name, (TriggerContent contents, int index) => contents.getEnableState(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<EnableState>(() => (StarcraftEPDTriggers.EnableState) getter(), (StarcraftEPDTriggers.EnableState toSet) => { setter(toSet); }, StarcraftEPDTriggers.EnableState.getDefaultValue, StarcraftEPDTriggers.EnableState.AllStates), StarcraftEPDTriggers.EnableState.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> SetQuantifier = (string name) => _get(name, (TriggerContent contents, int index) => contents.getSetQuantifier(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<SetQuantifier>(() => (StarcraftEPDTriggers.SetQuantifier) getter(), (StarcraftEPDTriggers.SetQuantifier toSet) => { setter(toSet); }, StarcraftEPDTriggers.SetQuantifier.getDefaultValue, StarcraftEPDTriggers.SetQuantifier.AllQuantifiers), StarcraftEPDTriggers.SetQuantifier.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> Order = (string name) => _get(name, (TriggerContent contents, int index) => contents.getOrder(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<Order>(() => (StarcraftEPDTriggers.Order) getter(), (StarcraftEPDTriggers.Order toSet) => { setter(toSet); }, StarcraftEPDTriggers.Order.getDefaultValue, StarcraftEPDTriggers.Order.AllOrders), StarcraftEPDTriggers.Order.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> MessageType = (string name) => _get(name, (TriggerContent contents, int index) => contents.getMessageType(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<MessageType>(() => (StarcraftEPDTriggers.MessageType) getter(), (StarcraftEPDTriggers.MessageType toSet) => { setter(toSet); }, StarcraftEPDTriggers.MessageType.getDefaultValue, StarcraftEPDTriggers.MessageType.AllDisplays), StarcraftEPDTriggers.MessageType.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> SwitchState = (string name) => _get(name, (TriggerContent contents, int index) => contents.getSwitchState(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<SwitchState>(() => (StarcraftEPDTriggers.SwitchState) getter(), (StarcraftEPDTriggers.SwitchState toSet) => { setter(toSet); }, StarcraftEPDTriggers.SwitchState.getDefaultValue, StarcraftEPDTriggers.SwitchState.AllStates), StarcraftEPDTriggers.SwitchState.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> Quantifier = (string name) => _get(name, (TriggerContent contents, int index) => contents.getQuantifier(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<Quantifier>(() => (StarcraftEPDTriggers.Quantifier) getter(), (StarcraftEPDTriggers.Quantifier toSet) => { setter(toSet); }, StarcraftEPDTriggers.Quantifier.getDefaultValue, StarcraftEPDTriggers.Quantifier.AllQuantifieres), StarcraftEPDTriggers.Quantifier.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> Resources = (string name) => _get(name, (TriggerContent contents, int index) => contents.getResources(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<Resources>(() => (StarcraftEPDTriggers.Resources) getter(), (StarcraftEPDTriggers.Resources toSet) => { setter(toSet); }, StarcraftEPDTriggers.Resources.getDefaultValue, StarcraftEPDTriggers.Resources.AllResources), StarcraftEPDTriggers.Resources.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> ScoreBoard = (string name) => _get(name, (TriggerContent contents, int index) => contents.getScoreBoard(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<ScoreBoard>(() => (StarcraftEPDTriggers.ScoreBoard) getter(), (StarcraftEPDTriggers.ScoreBoard toSet) => { setter(toSet); }, StarcraftEPDTriggers.ScoreBoard.getDefaultValue, StarcraftEPDTriggers.ScoreBoard.AllScoreBoards), StarcraftEPDTriggers.ScoreBoard.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> Address = (string name) => _get(name, (TriggerContent contents, int index) => contents.getInt(index, true), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionIntAmount(() => { IntDef val = (IntDef) getter(); val.UseHex = true; return val; }, (IntDef obj) => { setter(obj); }, () => new IntDef(0, true)), StarcraftEPDTriggers.IntDef.getDefaultValue(true));
 
-        private static Func<string, TriggerContentTypeDescriptor> AIScript = (string name) => _get(name, (TriggerContent contents, int index) => contents.getAIScript(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<AIScriptDef>(() => (AIScriptDef)getter(), (AIScriptDef obj) => { setter(obj); }, StarcraftEPDTriggers.AIScriptDef.getDefaultValue, StarcraftEPDTriggers.AIScriptDef.AllScripts), StarcraftEPDTriggers.AIScriptDef.getDefaultValue());
-        private static Func<string, TriggerContentTypeDescriptor> AIScriptAt = (string name) => _get(name, (TriggerContent contents, int index) => contents.getAIScriptAt(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<AIScriptAtDef>(() => (AIScriptAtDef)getter(), (AIScriptAtDef obj) => { setter(obj); }, StarcraftEPDTriggers.AIScriptAtDef.getDefaultValue, StarcraftEPDTriggers.AIScriptAtDef.AllScripts), StarcraftEPDTriggers.AIScriptAtDef.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> AIScript = (string name) => _get(name, (TriggerContent contents, int index) => contents.getAIScript(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<AIScriptDef>(() => (AIScriptDef) getter(), (AIScriptDef obj) => { setter(obj); }, StarcraftEPDTriggers.AIScriptDef.getDefaultValue, StarcraftEPDTriggers.AIScriptDef.AllScripts), StarcraftEPDTriggers.AIScriptDef.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> AIScriptAt = (string name) => _get(name, (TriggerContent contents, int index) => contents.getAIScriptAt(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<AIScriptAtDef>(() => (AIScriptAtDef) getter(), (AIScriptAtDef obj) => { setter(obj); }, StarcraftEPDTriggers.AIScriptAtDef.getDefaultValue, StarcraftEPDTriggers.AIScriptAtDef.AllScripts), StarcraftEPDTriggers.AIScriptAtDef.getDefaultValue());
 
-        private static Func<string, TriggerContentTypeDescriptor> SwitchName = (string name) => _get(name, (TriggerContent contents, int index) => contents.getSwitch(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<SwitchNameDef>(() => (SwitchNameDef)getter(), (SwitchNameDef obj) => { setter(obj); }, StarcraftEPDTriggers.SwitchNameDef.getDefaultValue, StarcraftEPDTriggers.SwitchNameDef.AllSwitches), StarcraftEPDTriggers.SwitchNameDef.getDefaultValue());
+        private static Func<string, TriggerContentTypeDescriptor> SwitchName = (string name) => _get(name, (TriggerContent contents, int index) => contents.getSwitch(index), (Func<SaveableItem> getter, Action<SaveableItem> setter) => new TriggerDefinitionGeneralDef<SwitchNameDef>(() => (SwitchNameDef) getter(), (SwitchNameDef obj) => { setter(obj); }, StarcraftEPDTriggers.SwitchNameDef.getDefaultValue, StarcraftEPDTriggers.SwitchNameDef.AllSwitches), StarcraftEPDTriggers.SwitchNameDef.getDefaultValue());
 
 
         public static TriggerContentTypeDescriptor VISUAL_LABEL(string name) {

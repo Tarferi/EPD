@@ -29,7 +29,7 @@ namespace StarcraftEPDTriggers {
         private MySelectableList lstCond;
         private MySelectableList lstAct;
         private Action<Trigger> _saveCallback;
-        
+
         private void setup() {
             lstCond = new MySelectableList(lstCondRaw);
             lstAct = new MySelectableList(lstActionsRaw);
@@ -98,7 +98,7 @@ namespace StarcraftEPDTriggers {
             _saveCallback = saveCallback;
             myTrigga = new Trigger();
             TriggerDefinitionPartProperties def = new TriggerDefinitionPartProperties();
-            myTrigga.reparseFromString(_originalTrigger.ToSaveString(), null, def);
+            myTrigga.reparseFromString(_originalTrigger.ToSaveString(false), null, def);
             updateValuesFromTrigger();
             ShowDialog();
             setup();
@@ -108,17 +108,17 @@ namespace StarcraftEPDTriggers {
             if (tabs.SelectedIndex >= 0) {
                 switch (tabs.SelectedIndex) {
                     case 0:
-                        wnd.Title = "Select players trigger should execute for.";
-                        break;
+                    wnd.Title = "Select players trigger should execute for.";
+                    break;
                     case 1:
-                        wnd.Title = "Trigger conditions (" + lstCond.GetAllItems().Count + "/16).";
-                        break;
+                    wnd.Title = "Trigger conditions (" + lstCond.GetAllItems().Count + "/16).";
+                    break;
                     case 2:
-                        wnd.Title = "Trigger actions (" + lstAct.GetAllItems().Count + "/64).";
-                        break;
+                    wnd.Title = "Trigger actions (" + lstAct.GetAllItems().Count + "/64).";
+                    break;
                     default:
-                        wnd.Title = "Trigger editor";
-                        break;
+                    wnd.Title = "Trigger editor";
+                    break;
                 }
             }
         }
@@ -130,8 +130,8 @@ namespace StarcraftEPDTriggers {
         private List<T> getFromSelLst<T>(List<MySelectableListItem> src) {
             List<T> lst = new List<T>();
             foreach (MySelectableListItem item in src) {
-                if (((object[])item.CustomData)[1] is T) {
-                    lst.Add((T)(((object[])item.CustomData)[1]));
+                if (((object[]) item.CustomData)[1] is T) {
+                    lst.Add((T) (((object[]) item.CustomData)[1]));
                 } else {
                     throw new NotImplementedException();
                 }
@@ -154,7 +154,7 @@ namespace StarcraftEPDTriggers {
             TriggerDefinitionPartProperties def = new TriggerDefinitionPartProperties();
             def.g = cb;
             Trigger.regenerateTextboxForTriggerDefinitionParts(def, act.getDefinitionParts, (RichTextBox qcb) => { cb = qcb; });
-            MySelectableListItem item = new MySelectableListItem(new Object[] { cb, act, def}, cb);
+            MySelectableListItem item = new MySelectableListItem(new Object[] { cb, act, def }, cb);
             lstAct.Add(item);
             return item;
         }
@@ -164,7 +164,7 @@ namespace StarcraftEPDTriggers {
             // At least 1 player is selected
             Affecteds.Clear();
             for (int i = 0; i < playersChecks.Length; i++) {
-                if ((bool)playersChecks[i].IsChecked) {
+                if ((bool) playersChecks[i].IsChecked) {
                     Affecteds.Add(PlayerDef.AllPlayers[i]);
                 }
             }
@@ -209,7 +209,7 @@ namespace StarcraftEPDTriggers {
                 myTrigga.Actions.Add(action);
             }
             TriggerDefinitionPartProperties def = new TriggerDefinitionPartProperties();
-            _originalTrigger.reparseFromString(myTrigga.ToSaveString(), _colection, def);
+            _originalTrigger.reparseFromString(myTrigga.ToSaveString(false), _colection, def);
             _saveCallback(_originalTrigger);
             Close();
         }
@@ -246,8 +246,8 @@ namespace StarcraftEPDTriggers {
         private void btnCondCopy_Click(object sender, RoutedEventArgs e) {
             MySelectableListItem sel = lstCond.CurrentlySelected;
             if (sel != null) {
-                Condition cond = ((object[])sel.CustomData)[1] as Condition;
-                Parser parser = new Parser(new Scanner(cond.ToSaveString()));
+                Condition cond = ((object[]) sel.CustomData)[1] as Condition;
+                Parser parser = new Parser(new Scanner(cond.ToSaveString(false)));
                 Condition clone = parser.parseOnlyCondition();
                 MySelectableListItem item = addVisualCondition(clone);
                 lstCond.MoveItemBeforeItem(item, sel);
@@ -275,22 +275,22 @@ namespace StarcraftEPDTriggers {
 
             if (lastSelected != newSelected) { // Ignore the crap of this shit
                 if (lastSelected != null) {
-                    FrameworkElement ls = ((object[])lastSelected.CustomData)[0] as FrameworkElement;
-                    TriggerDefinitionPartProperties props = ((object[])lastSelected.CustomData)[2] as TriggerDefinitionPartProperties;
+                    FrameworkElement ls = ((object[]) lastSelected.CustomData)[0] as FrameworkElement;
+                    TriggerDefinitionPartProperties props = ((object[]) lastSelected.CustomData)[2] as TriggerDefinitionPartProperties;
                     props.FireSelectionChange(false);
                     if (ls is RichTextBox) {
-                        ((RichTextBox)ls).Background = Brushes.White;
-                        ((RichTextBox)ls).Foreground = Brushes.Black;
+                        ((RichTextBox) ls).Background = Brushes.White;
+                        ((RichTextBox) ls).Foreground = Brushes.Black;
                         ls.InvalidateVisual();
                     }
                 }
                 if (newSelected != null) {
-                    FrameworkElement ls = ((object[])newSelected.CustomData)[0] as FrameworkElement;
-                    TriggerDefinitionPartProperties props = ((object[])newSelected.CustomData)[2] as TriggerDefinitionPartProperties;
+                    FrameworkElement ls = ((object[]) newSelected.CustomData)[0] as FrameworkElement;
+                    TriggerDefinitionPartProperties props = ((object[]) newSelected.CustomData)[2] as TriggerDefinitionPartProperties;
                     props.FireSelectionChange(true);
                     if (ls is RichTextBox) {
-                        ((RichTextBox)ls).Background = selected;
-                        ((RichTextBox)ls).Foreground = Brushes.White;
+                        ((RichTextBox) ls).Background = selected;
+                        ((RichTextBox) ls).Foreground = Brushes.White;
                         ls.InvalidateVisual();
                     }
                 }
@@ -330,8 +330,8 @@ namespace StarcraftEPDTriggers {
         private void btnActCopy_Click(object sender, RoutedEventArgs e) {
             MySelectableListItem sel = lstAct.CurrentlySelected;
             if (sel != null) {
-                Action act = ((object[])sel.CustomData)[1] as Action;
-                Parser parser = new Parser(new Scanner(act.ToSaveString()));
+                Action act = ((object[]) sel.CustomData)[1] as Action;
+                Parser parser = new Parser(new Scanner(act.ToSaveString(false)));
                 Action clone = parser.parseOnlyAction();
                 MySelectableListItem item = addVisualAction(clone);
                 lstAct.MoveItemBeforeItem(item, sel);
@@ -357,22 +357,22 @@ namespace StarcraftEPDTriggers {
 
             if (lastSelected != newSelected) { // Ignore the crap of this shit
                 if (lastSelected != null) {
-                    FrameworkElement ls = ((object[])lastSelected.CustomData)[0] as FrameworkElement;
-                    TriggerDefinitionPartProperties props = ((object[])lastSelected.CustomData)[2] as TriggerDefinitionPartProperties;
+                    FrameworkElement ls = ((object[]) lastSelected.CustomData)[0] as FrameworkElement;
+                    TriggerDefinitionPartProperties props = ((object[]) lastSelected.CustomData)[2] as TriggerDefinitionPartProperties;
                     props.FireSelectionChange(false);
                     if (ls is RichTextBox) {
-                        ((RichTextBox)ls).Background = Brushes.White;
-                        ((RichTextBox)ls).Foreground = Brushes.Black;
+                        ((RichTextBox) ls).Background = Brushes.White;
+                        ((RichTextBox) ls).Foreground = Brushes.Black;
                         ls.InvalidateVisual();
                     }
                 }
                 if (newSelected != null) {
-                    FrameworkElement ls = ((object[])newSelected.CustomData)[0] as FrameworkElement;
-                    TriggerDefinitionPartProperties props = ((object[])newSelected.CustomData)[2] as TriggerDefinitionPartProperties;
+                    FrameworkElement ls = ((object[]) newSelected.CustomData)[0] as FrameworkElement;
+                    TriggerDefinitionPartProperties props = ((object[]) newSelected.CustomData)[2] as TriggerDefinitionPartProperties;
                     props.FireSelectionChange(true);
                     if (ls is RichTextBox) {
-                        ((RichTextBox)ls).Background = selected;
-                        ((RichTextBox)ls).Foreground = Brushes.White;
+                        ((RichTextBox) ls).Background = selected;
+                        ((RichTextBox) ls).Foreground = Brushes.White;
                         ls.InvalidateVisual();
                     }
                 }
@@ -381,12 +381,12 @@ namespace StarcraftEPDTriggers {
         }
 
         private void btnNewCond_Click(object sender, RoutedEventArgs e) {
-             new AddCondAct("condition", getConditionTemplates(), (TriggerContent c) => {
+            new AddCondAct("condition", getConditionTemplates(), (TriggerContent c) => {
                 if (c is Condition) {
                     Condition a = c as Condition;
                     addVisualCondition(a);
-                     TabControl_SelectionChanged(null, null);
-                     return;
+                    TabControl_SelectionChanged(null, null);
+                    return;
                 }
                 throw new NotImplementedException();
             });
@@ -402,7 +402,7 @@ namespace StarcraftEPDTriggers {
                 }
                 throw new NotImplementedException();
             });
-           
+
         }
 
         private class ConstrucableTriggerTemplate : ConstrucableTrigger {
@@ -494,7 +494,7 @@ namespace StarcraftEPDTriggers {
 
             private static src.Scanner getScanner(TriggerContentTypeDescriptor[] fields, int[] textMappingI) {
                 int[] textMapping = new int[textMappingI.Length];
-                for(int i=0;i<textMapping.Length;i++) {
+                for (int i = 0; i < textMapping.Length; i++) {
                     textMapping[textMappingI[i]] = i;
                 }
 
@@ -503,15 +503,15 @@ namespace StarcraftEPDTriggers {
                 sb.Append("(");
                 List<TriggerContentTypeDescriptor> usefulFields = new List<TriggerContentTypeDescriptor>();
                 for (int i = 0; i < fields.Length; i++) {
-                    if(!(fields[i] is TriggerContentTypeDescriptorVisual)) {
+                    if (!(fields[i] is TriggerContentTypeDescriptorVisual)) {
                         usefulFields.Add(fields[i]);
                     }
                 }
 
-                for (int i=0;i< usefulFields.Count;i++) {
+                for (int i = 0; i < usefulFields.Count; i++) {
                     TriggerContentTypeDescriptor whatNeedsToBeHere = usefulFields[textMapping[i]];
-                    sb.Append(whatNeedsToBeHere.getDefaultValue().ToSaveString());
-                    if(i != usefulFields.Count - 1) {
+                    sb.Append(whatNeedsToBeHere.getDefaultValue().ToSaveString(false));
+                    if (i != usefulFields.Count - 1) {
                         sb.Append(", ");
                     }
                 }

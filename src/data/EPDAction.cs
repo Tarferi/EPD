@@ -265,8 +265,6 @@ namespace StarcraftEPDTriggers.src.data {
         public static readonly MemoryPlace UnitShieldsToggle = _get("Set Unit Shields", 0x006647B0, 1, UnitDef.AllUnits.Length, "shield for ", UnitDef.getByIndex, BoolDef.getByIndex, false);
         public static readonly MemoryPlace UnitMovementFlags = _get("Set Unit Movement Flags (Experimental)", 0x00660FC8, 1, UnitDef.AllUnits.Length, "unit movement flags for ", UnitDef.getByIndex, (int index) => Int32Def.getByIndex(index, false), true);
 
-        public static readonly MemoryPlace ImageRemappingIndex = _get("Set Image Remapping Index (Experimental)", 0x00669A40, 1, ImageDef.AllImages.Length, "remapping index for ", ImageDef.getByIndex, RemappingIndexDef.getByIndex, true);
-
 
 
         public static readonly MemoryPlace WeaponGraphics = _get("Set Weapon Graphic", 0x00656CA8, 4, WeaponDef.AllWeapons.Length, "graphic for weapon ", WeaponDef.getByIndex, FlingyImageDef.getByIndex, true);
@@ -319,7 +317,11 @@ namespace StarcraftEPDTriggers.src.data {
 
         public static readonly MemoryPlace FlingySpriteIndex = _get("Set Flingy Sprite Index", 0x006CA318, 2, FlingyDef.AllFlingys.Length, "sprite ID for Flingy ", FlingyDef.getByIndex, SpriteDef.getByIndex, true);
         public static readonly MemoryPlace ImageScriptID = _get("Set Image IScript ID", 0x0066EC48, 4, ImageDef.AllImages.Length, "IScript ID for Image ", ImageDef.getByIndex, IScriptDef.getByIndex, true);
+        public static readonly MemoryPlace ImageDrawingFunction = _get("Set Image Drawing Function", 0x00669E28, 1, ImageDef.AllImages.Length, "remapping function for Image ", ImageDef.getByIndex, DrawingFunctionDef.getByIndex, true);
 
+
+        public static readonly MemoryPlace ImageRemappingIndex = _get("Set Image Remapping Index (Experimental)", 0x00669A40, 1, ImageDef.AllImages.Length, "remapping index for ", ImageDef.getByIndex, RemappingIndexDef.getByIndex, true);
+        public static readonly MemoryPlace TurnRadius = _get("Set Turn Radius (Experimental)", 0x006C9E20, 1, FlingyDef.AllFlingys.Length, "turn radius for ", FlingyDef.getByIndex, (int index) => Int32Def.getByIndex(index, false), true);
 
 
         //public static readonly MemoryPlace Latency = _get1("Set Game Latency", 0x0051CE84, 4, "game latency to ", LatencyDef.getByIndex, true);

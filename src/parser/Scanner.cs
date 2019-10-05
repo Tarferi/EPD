@@ -1,4 +1,5 @@
 ﻿using StarcraftEPDTriggers.src.parser;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -25,50 +26,51 @@ namespace StarcraftEPDTriggers.src {
         private void unreadLastChar() {
             reader.unread();
         }
-        
+
 
         public Token getNextToken() {
+            int position = reader.getPosition();
             char ch = getNextChar();
             switch (ch) {
                 case '"':
-                    return getString();
+                return getString(position);
                 case '(':
-                    return new LeftBracket();
+                return new LeftBracket(position);
                 case ')':
-                    return new RightBracket();
+                return new RightBracket(position);
                 case ':':
-                    return new Colon();
+                return new Colon(position);
                 case '.':
-                    return new Dot();
+                return new Dot(position);
                 case ',':
-                    return new Comma();
+                return new Comma(position);
                 case ';':
-                    return new Semicolon();
+                return new Semicolon(position);
                 case '/':
-                    unreadLastChar();
-                    return getTokenEnd();
+                unreadLastChar();
+                return getTokenEnd(position);
                 case ' ':
                 case '\t':
                 case '\r':
                 case '\n':
-                    return getNextToken();
+                return getNextToken();
                 case '{':
-                    return new StartBracket();
+                return new StartBracket(position);
                 case '}':
-                    return new EndBracket();
+                return new EndBracket(position);
             }
             if ((ch >= '0' && ch <= '9') || ch == '-') {
                 unreadLastChar();
-                return getNumber();
+                return getNumber(position);
             }
             if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) {
                 unreadLastChar();
-                return getCommandToken();
+                return getCommandToken(position);
             }
             return null;
         }
 
-        private Token getCommandToken() {
+        private Token getCommandToken(int position) {
             StringBuilder sb = new StringBuilder();
             while (true) {
                 char ch = getNextChar();
@@ -76,7 +78,7 @@ namespace StarcraftEPDTriggers.src {
                     sb.Append(ch);
                 } else {
                     unreadLastChar();
-                    CommandToken t = new CommandToken(sb.ToString());
+                    CommandToken t = new CommandToken(sb.ToString(), position);
                     if (t.isValid()) {
                         return t;
                     } else { // Invalid trigger?
@@ -86,23 +88,23 @@ namespace StarcraftEPDTriggers.src {
             }
         }
 
-        private Token getTokenEnd() {
+        private Token getTokenEnd(int position) {
             int count = 0;
             while (true) {
                 char ch = getNextChar();
                 if (ch == '/') {
                     count++;
                     if (count == 4) {
-                        return new TokenEnd();
+                        return new TokenEnd(position);
                     }
                 }
             }
         }
 
-        private Token getNumber() {
+        private Token getNumber(int position) {
             StringBuilder sb = new StringBuilder();
             char pm = getNextChar();
-            if(pm == '-') {
+            if (pm == '-') {
                 sb.Append("-");
             } else {
                 unreadLastChar();
@@ -113,9 +115,13 @@ namespace StarcraftEPDTriggers.src {
                     sb.Append(ch);
                 } else {
                     unreadLastChar();
-                    return new NumToken(sb.ToString());
+                    return new NumToken(sb.ToString(), position);
                 }
             }
+        }
+
+        public String getOriginalInputString() {
+            return v;
         }
 
         private string getRawStringSlow() {
@@ -139,7 +145,7 @@ namespace StarcraftEPDTriggers.src {
             bool expectLiteral = false;
             while (true) {
                 string buffer = reader.getSubstr(64);
-                if(buffer[0] == '"') {
+                if (buffer[0] == '"') {
                     if (!expectLiteral) { // Empty buffer
                         reader.unread(buffer.Length - 2); // Exclude the " from next reading
                         return sb.ToString();
@@ -160,7 +166,7 @@ namespace StarcraftEPDTriggers.src {
                                 reader.unread(buffer.Length - resultBuffer.Length - 1); // Include the final " char
                                 return sb.ToString();
                             }
- 
+
                         }
                     }
                     sb.Append(buffer);
@@ -171,12 +177,13 @@ namespace StarcraftEPDTriggers.src {
             }
         }
 
-        private Token getString() {
+        private Token getString(int position) {
             //var watch = System.Diagnostics.Stopwatch.StartNew();
             string sb = getRawStringSlow();
             //var elapsedMs = watch.ElapsedMilliseconds;
             //Debug.WriteLine("Time spent: " + elapsedMs + " ms.");
-            return new StringToken(sb);
+            return new StringToken(sb, position);
         }
+
     }
 }

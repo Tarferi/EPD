@@ -27,9 +27,13 @@ namespace StarcraftEPDTriggers.src.parser {
             max = _str.Length - 1;
         }
 
+        public int getPosition() {
+            return pos;
+        }
+
         public char read() {
-            if(pos > max) {
-                return (char)0;
+            if (pos > max) {
+                return (char) 0;
             } else {
                 char chr = _str[pos];
                 pos++;

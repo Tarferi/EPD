@@ -2,15 +2,26 @@
 using System.Windows;
 
 namespace StarcraftEPDTriggers.src {
+
     public class Token {
 
         private string content;
+        private int position;
 
         public static string[] StringTable;
         public static string[] ExtendedStringTable;
-       
-        public Token(string content) {
+
+        public Token(string content, int position) {
             this.content = content;
+            this.position = position;
+        }
+
+        public int getPosition() {
+            return position;
+        }
+
+        public string getRawToken() {
+            return content;
         }
 
         public string getContent() {
@@ -25,11 +36,37 @@ namespace StarcraftEPDTriggers.src {
             return content.Equals(s.ToString());
         }
 
+        public int toUnitInt() {
+            if (this is StringToken) {
+                foreach (UnitVanillaDef unit in UnitVanillaDef.AllUnits) {
+                    if (unit.UnitName.Equals(this.content)) {
+                        return unit.UnitID;
+                    }
+                }
+            } else {
+                return toInt();
+            }
+            throw new NotImplementedException();
+        }
+
+        public int toSwitchInt() {
+            if (this is StringToken) {
+                foreach (SwitchNameDef sw in SwitchNameDef.AllSwitches) {
+                    if (sw.SwitchName.Equals(this.content)) {
+                        return sw.SwitchIndex;
+                    }
+                }
+            } else {
+                return toInt();
+            }
+            throw new NotImplementedException();
+        }
+
         public int toInt() {
             if (this is NumToken) {
                 uint out1;
-                if(uint.TryParse(content, out out1)) {
-                    return (int)out1;
+                if (uint.TryParse(content, out out1)) {
+                    return (int) out1;
                 } else {
                     return int.Parse(content);
                 }
@@ -108,6 +145,12 @@ namespace StarcraftEPDTriggers.src {
                 } else if (ct.isDontAlwaysDisplay()) {
                     return MessageType.DontAlwaysDisplay;
                 }
+            } else if (this is StringToken) {
+                foreach (MessageType type in MessageType.AllDisplays) {
+                    if (type.ToString().Equals(this.content)) {
+                        return type;
+                    }
+                }
             }
             throw new NotImplementedException();
         }
@@ -144,13 +187,13 @@ namespace StarcraftEPDTriggers.src {
             if (this is StringToken) {
                 string dtr = content;
                 return new StringDef(dtr);
-            } else if(this is NumToken) { // Index to string table
+            } else if (this is NumToken) { // Index to string table
                 int index = this.toInt();
                 if (index >= 0 && index < StringTable.Length) {
                     return new StringDef(StringTable[index]);
                 } else {
                     string undef = "<Undefined>";
-                    MessageBox.Show("Invalid string found.\nString at index " + index + " is no within range of defined strings.\nString changed to \""+ undef + "\"", "Trigger Editor", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Invalid string found.\nString at index " + index + " is no within range of defined strings.\nString changed to \"" + undef + "\"", "Trigger Editor", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return new StringDef(undef);
                 }
             }
@@ -175,6 +218,12 @@ namespace StarcraftEPDTriggers.src {
             if (this is NumToken) {
                 int index = this.toInt();
                 return LocationDef.getByIndex(index);
+            } else if (this is StringToken) {
+                foreach (LocationDef location in LocationDef.AllLocations) {
+                    if (location.LocationName.Equals(this.content)) {
+                        return location;
+                    }
+                }
             }
             throw new NotImplementedException();
         }
@@ -183,6 +232,13 @@ namespace StarcraftEPDTriggers.src {
             if (this is NumToken) {
                 int index = this.toInt();
                 return PlayerDef.getByIndex(index);
+            } else if (this is StringToken) {
+                foreach (PlayerDef pd in PlayerDef.AllPlayers) {
+                    if (pd.GroupName.Equals(this.content)) {
+                        return pd;
+                    }
+                }
+
             }
             throw new NotImplementedException();
         }
@@ -226,11 +282,11 @@ namespace StarcraftEPDTriggers.src {
         internal int toBinaryInt() {
             if (content.Length == 32) {
                 int result = 0;
-                foreach(char chr in content) {
+                foreach (char chr in content) {
                     byte b;
-                    if(chr == '0') {
+                    if (chr == '0') {
                         b = 0;
-                    } else if(chr == '1') {
+                    } else if (chr == '1') {
                         b = 1;
                     } else {
                         throw new NotImplementedException();
@@ -244,31 +300,31 @@ namespace StarcraftEPDTriggers.src {
         }
     }
 
-    class LeftBracket : Token { public LeftBracket() : base("(") { } }
+    class LeftBracket : Token { public LeftBracket(int position) : base("(", position) { } }
 
-    class RightBracket : Token { public RightBracket() : base(")") { } }
+    class RightBracket : Token { public RightBracket(int position) : base(")", position) { } }
 
-    class Semicolon : Token { public Semicolon() : base(";") { } }
+    class Semicolon : Token { public Semicolon(int position) : base(";", position) { } }
 
-    class Comma : Token { public Comma() : base(",") { } }
+    class Comma : Token { public Comma(int position) : base(",", position) { } }
 
-    class Dot : Token { public Dot() : base(".") { } }
+    class Dot : Token { public Dot(int position) : base(".", position) { } }
 
-    class Colon : Token { public Colon() : base(":") { } }
+    class Colon : Token { public Colon(int position) : base(":", position) { } }
 
-    class StartBracket : Token { public StartBracket() : base("{") { } }
+    class StartBracket : Token { public StartBracket(int position) : base("{", position) { } }
 
-    class EndBracket : Token { public EndBracket() : base("}") { } }
+    class EndBracket : Token { public EndBracket(int position) : base("}", position) { } }
 
 
-    class StringToken : Token { public StringToken(string s) : base(s) { } }
+    class StringToken : Token { public StringToken(string s, int position) : base(s, position) { } }
 
-    class NumToken : Token { public NumToken(string s) : base(s) { } }
+    class NumToken : Token { public NumToken(string s, int position) : base(s, position) { } }
 
-    class TokenEnd : Token { public TokenEnd() : base("") { } }
+    class TokenEnd : Token { public TokenEnd(int position) : base("", position) { } }
 
     class CommandToken : Token {
-        public CommandToken(string command) : base(command) {
+        public CommandToken(string command, int position) : base(command, position) {
 
         }
 

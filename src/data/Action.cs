@@ -12,26 +12,35 @@ namespace StarcraftEPDTriggers {
         public Action(Parser parser, int num) : base(parser, num) { }
 
         public override string ToString() {
-            return ToSaveString();
+            return ToSaveString(false);
         }
 
-        public virtual string ToSaveString() {
+        public String ToCommentString() {
+            if (!(this is ActionComment)) {
+                throw new NotImplementedException();
+            } else {
+                SaveableItem[] parts = ((GenericAction) this).getUsefulDefinitionParts();
+                return parts[0].ToString();
+            }
+        }
+
+        public virtual string ToSaveString(bool readable) {
             StringBuilder sb = new StringBuilder();
-            if(!this.isEnabled()) {
+            if (!this.isEnabled()) {
                 sb.Append(";");
             }
             if (this is GenericAction) {
-                SaveableItem[] parts = ((GenericAction)this).getUsefulDefinitionParts();
-                sb.Append(((GenericAction)this).Name + "(");
+                SaveableItem[] parts = ((GenericAction) this).getUsefulDefinitionParts();
+                sb.Append(((GenericAction) this).Name + "(");
                 for (int i = 0; i < parts.Length; i++) {
                     SaveableItem part = parts[i];
-                    sb.Append(part.ToSaveString());
+                    sb.Append(part.ToSaveString(readable));
                     if (i != parts.Length - 1) {
                         sb.Append(", ");
                     }
                 }
                 sb.Append(");");
-            } else if(this is EPDAction) {
+            } else if (this is EPDAction) {
                 EPDAction epd = (EPDAction) this;
                 sb.Append(epd.ToString());
             } else {
@@ -60,14 +69,14 @@ namespace StarcraftEPDTriggers {
         public T get<T>(int index) where T : SaveableItem {
             object obj = _obj.getRawObject(index);
             if (obj is T) {
-                return (T)obj;
+                return (T) obj;
             }
             throw new NotImplementedException();
         }
 
-        public void set<T>(T obj, int index)where T:SaveableItem {
+        public void set<T>(T obj, int index) where T : SaveableItem {
             object aobj = _obj.getRawObject(index);
-            if(aobj is T) {
+            if (aobj is T) {
                 _obj.setRawObject(obj, index);
                 return;
             }
@@ -76,11 +85,11 @@ namespace StarcraftEPDTriggers {
 
 
         public GenericAction(string name, int[] textMapping, Func<GenericAction, TriggerDefinitionPart[], TriggerDefinitionPart[]> remapVisuals, Func<GenericAction, SaveableItem[], SaveableItem[]> remapSaveables, GenericAction original) : base(null, 0) {
-            _obj = new GeneralTriggerContentInternalCalculator(name, textMapping,(TriggerDefinitionPart[] input)=> remapVisuals(this, input),(SaveableItem[] input)=> remapSaveables(this, input), original._obj);
+            _obj = new GeneralTriggerContentInternalCalculator(name, textMapping, (TriggerDefinitionPart[] input) => remapVisuals(this, input), (SaveableItem[] input) => remapSaveables(this, input), original._obj);
         }
 
 
-        public GenericAction(Parser parser, string name, TriggerContentTypeDescriptor[] types, int[] usefulMapping, int[] textMapping, int[]trigMapping) : base(parser, getArgCount(types)) {
+        public GenericAction(Parser parser, string name, TriggerContentTypeDescriptor[] types, int[] usefulMapping, int[] textMapping, int[] trigMapping) : base(parser, getArgCount(types)) {
             _obj = new GeneralTriggerContentInternalCalculator(parser, name, types, usefulMapping, textMapping, trigMapping, getArgCount, this);
         }
 
@@ -183,21 +192,21 @@ namespace StarcraftEPDTriggers {
             Action<UnitVanillaDef> unitTypeSetter = (UnitVanillaDef unit) => _action.set<UnitVanillaDef>(unit, unitIndex);
             Func<StringDef> titleGetter = () => _action.get<StringDef>(titleIndex);
             Action<StringDef> titleSetter = (StringDef str) => _action.set<StringDef>(str, titleIndex);
-       
+
             _unitTypeGetter = () => {
                 int killsIndex = unitTypeGetter().getIndex();
                 int index = killsIndex < offset ? killsIndex : killsIndex - offset;
-                return UnitVanillaDef.getByIndex( index );
+                return UnitVanillaDef.getByIndex(index);
             };
-            _unitTypeSetter = (UnitVanillaDef unit)=> { unitTypeSetter(UnitVanillaDef.getByIndex(unit.getIndex() + offset)); };
+            _unitTypeSetter = (UnitVanillaDef unit) => { unitTypeSetter(UnitVanillaDef.getByIndex(unit.getIndex() + offset)); };
             _titleGetter = titleGetter;
             _titleSetter = titleSetter;
-       
-    }
+
+        }
 
         protected override TriggerDefinitionPart[] getInnerDefinitionParts() {
             UnitVanillaDef[] lst = new UnitVanillaDef[UnitVanillaDef.AllUnits.Length - 5];
-            for(int i = 0; i < lst.Length; i++) {
+            for (int i = 0; i < lst.Length; i++) {
                 lst[i] = UnitVanillaDef.AllUnits[i + 5];
             }
 
@@ -209,36 +218,36 @@ namespace StarcraftEPDTriggers {
             };
         }
 
-        public override string ToSaveString() {
-            return _action.ToSaveString();
+        public override string ToSaveString(bool readable) {
+            return _action.ToSaveString(readable);
         }
     }
 
     class ActionSetDeaths : GenericAction {
 
-        public ActionSetDeaths(RawActionSetDeaths trigger) : base("Set deaths", new int[] { 1, 3, 5, 7 }, (GenericAction instance, TriggerDefinitionPart[] arg) => remapper2(instance, arg), (GenericAction instance, SaveableItem[] arg) => remapper1(instance, arg), trigger ) { }
+        public ActionSetDeaths(RawActionSetDeaths trigger) : base("Set deaths", new int[] { 1, 3, 5, 7 }, (GenericAction instance, TriggerDefinitionPart[] arg) => remapper2(instance, arg), (GenericAction instance, SaveableItem[] arg) => remapper1(instance, arg), trigger) { }
         /*
         private PlayerDef pd;
         private UnitVanillaDef ud;
         */
 
         private static SaveableItem[] remapper1(GenericAction genericInstance, SaveableItem[] original) {
-           /*
-            ActionSetDeaths instance = (ActionSetDeaths)genericInstance;
-            instance.pd = PlayerDef.getByIndex((original[0] as IntDef).getIndex());
-            instance.ud = UnitVanillaDef.getByIndex((original[1] as IntDef).getIndex());
+            /*
+             ActionSetDeaths instance = (ActionSetDeaths)genericInstance;
+             instance.pd = PlayerDef.getByIndex((original[0] as IntDef).getIndex());
+             instance.ud = UnitVanillaDef.getByIndex((original[1] as IntDef).getIndex());
 
-            original[0] = instance.pd;
-            original[1] = instance.ud;
-            */
+             original[0] = instance.pd;
+             original[1] = instance.ud;
+             */
             return original;
         }
 
         private static TriggerDefinitionPart[] remapper2(GenericAction genericInstance, TriggerDefinitionPart[] remoriginal) {
-            TriggerDefinitionIntAmount rawPlayer = (TriggerDefinitionIntAmount)remoriginal[1];
-            TriggerDefinitionIntAmount rawUnit = (TriggerDefinitionIntAmount)remoriginal[7];
+            TriggerDefinitionIntAmount rawPlayer = (TriggerDefinitionIntAmount) remoriginal[1];
+            TriggerDefinitionIntAmount rawUnit = (TriggerDefinitionIntAmount) remoriginal[7];
 
-            ActionSetDeaths instance = (ActionSetDeaths)genericInstance;
+            ActionSetDeaths instance = (ActionSetDeaths) genericInstance;
 
             //remoriginal[1] = new TriggerDefinitionGeneralDef<PlayerDef>(()=>instance.pd, (PlayerDef pd)=> { instance.pd = pd; }, PlayerDef.getDefaultValue, PlayerDef.AllPlayers);
             //remoriginal[7] = new TriggerDefinitionGeneralDef<UnitVanillaDef>(() => instance.ud, (UnitVanillaDef ud) => { instance.ud = ud; }, UnitVanillaDef.getDefaultValue, UnitVanillaDef.AllUnits);

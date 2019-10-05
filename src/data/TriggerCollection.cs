@@ -27,10 +27,8 @@ namespace StarcraftEPDTriggers.src.data {
         [DllImport("TriggerMaster.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "#3")]
         public static extern int getResultTextSize(string inputFileNameoutputString);
 
-        
         [DllImport("TriggerMaster.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "#2")]
         unsafe public static extern bool SCXToTXT(string inputFileName, char* result, int resultLength);
-
 
         [DllImport("TriggerMaster.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "#1")]
         public static extern bool TXTToSCX(string outputFileNanem, string triggers, bool append);
@@ -48,20 +46,19 @@ namespace StarcraftEPDTriggers.src.data {
             }
             StringBuilder sb = new StringBuilder();
             bool ok = false;
-            unsafe
-            {
+            unsafe {
                 byte[] myArray = new byte[len];
                 fixed (byte* ptr = &myArray[0]) {
                     ok = SCXToTXT(path, (char*) ptr, len);
                 }
                 if (ok) {
-                    for(int i=0;i<len;i++) {
-                        sb.Append((char)myArray[i]);
+                    for (int i = 0; i < len; i++) {
+                        sb.Append((char) myArray[i]);
                     }
                 }
 
             }
-            if(ok) {
+            if (ok) {
                 return sb.ToString();
             } else {
                 return null;
@@ -70,28 +67,28 @@ namespace StarcraftEPDTriggers.src.data {
 
         private string runExtractionFast(string path) {
             string returner = null;
-            unsafe
-            {
+            unsafe {
                 IntPtr ret = SCXToTXTUnsafe(path);
-                if(ret != IntPtr.Zero) {
+                if (ret != IntPtr.Zero) {
                     string str = Marshal.PtrToStringAnsi(ret);
-                    SCXToTXTUnsafeFree((IntPtr)ret);
+                    SCXToTXTUnsafeFree((IntPtr) ret);
                     returner = str;
                 }
             }
             return returner;
         }
 
-        public bool load(string filename) {
-            string triggersText = runExtractionFast(filename);
-            if(triggersText != null) {
-                triggersText = triggersText.Replace("\n", "\r\n");
+        public bool loadFromSTR(bool onlyTriggers, bool escapeNewLines, string triggersText, ref int lastReadPosition, ref int lastReadPositionEnd) {
+            if (triggersText != null) {
+                if (escapeNewLines) {
+                    triggersText = triggersText.Replace("\n", "\r\n");
+                }
                 //File.WriteAllText("loaded.txt", triggersText);
                 Scanner scanner = new src.Scanner(triggersText);
                 Parser parser = new src.Parser(scanner);
                 AllTrigers.Clear();
                 TriggerData.Clear();
-                if (parser.parse()) {
+                if (parser.parse(onlyTriggers, ref lastReadPosition, ref lastReadPositionEnd)) {
                     List<Trigger> triggers = parser.getTriggers();
                     foreach (Trigger trigger in triggers) {
                         AllTrigers.Add(trigger);
@@ -108,6 +105,12 @@ namespace StarcraftEPDTriggers.src.data {
             return false;
         }
 
+        public bool load(string filename) {
+            string triggersText = runExtractionFast(filename);
+            int zer = 0;
+            return loadFromSTR(false, true, triggersText, ref zer, ref zer);
+        }
+
         public bool save(string thr_path, string triggersText) {
             //File.WriteAllText("saved.txt", triggersText);
             return TXTToSCX(thr_path, triggersText, false);
@@ -115,11 +118,11 @@ namespace StarcraftEPDTriggers.src.data {
 
         public void UpdateAffecteds(Trigger trigger) {
             TriggerCreated(trigger);
-            
+
             List<PlayerDef> affecteds = trigger.getAffectedPlayers();
             foreach (KeyValuePair<PlayerDef, List<Trigger>> subList in TriggerData) {
-                if(subList.Value.Contains(trigger)) { // Player owns it
-                    if(!affecteds.Contains(subList.Key)) { // Player shouldn't own it
+                if (subList.Value.Contains(trigger)) { // Player owns it
+                    if (!affecteds.Contains(subList.Key)) { // Player shouldn't own it
                         subList.Value.Remove(trigger); // Remove it from player
                     }
                 } else { // Player doesn't own it
@@ -128,15 +131,16 @@ namespace StarcraftEPDTriggers.src.data {
                     }
                 }
             }
-            
+
         }
 
         public Trigger loadAndInsertAfter(string str, Trigger trigger) {
             Scanner scanner = new src.Scanner(str);
             Parser parser = new src.Parser(scanner);
-            if (parser.parse(true)) {
+            int zer = 0;
+            if (parser.parse(true, ref zer, ref zer)) {
                 List<Trigger> triggers = parser.getTriggers();
-                if(triggers.Count == 1) {
+                if (triggers.Count == 1) {
                     Trigger trig = triggers[0];
                     InsertAfter(AllTrigers, trigger, trig);
                     foreach (KeyValuePair<PlayerDef, List<Trigger>> subList in TriggerData) {
@@ -150,14 +154,14 @@ namespace StarcraftEPDTriggers.src.data {
 
         public void Delete(Trigger trigger) {
             AllTrigers.Remove(trigger);
-            foreach(KeyValuePair<PlayerDef, List<Trigger>> subList in TriggerData) {
+            foreach (KeyValuePair<PlayerDef, List<Trigger>> subList in TriggerData) {
                 subList.Value.Remove(trigger);
             }
         }
 
         private void InsertAfter(List<Trigger> lst, Trigger trigInTheList, Trigger trigBeingInserted) {
             int index = lst.IndexOf(trigInTheList);
-            if(index >=0 && index < lst.Count) {
+            if (index >= 0 && index < lst.Count) {
                 //lst.Add(trigBeingInserted);
                 //Move(lst, trigBeingInserted, index + 1);
                 lst.Insert(index + 1, trigBeingInserted);
@@ -170,7 +174,7 @@ namespace StarcraftEPDTriggers.src.data {
             int index = lst.IndexOf(trigger);
             if (index >= 0 && index < lst.Count) {
                 if (indexOffset < 0) { // Move up
-                    if (index >=  -indexOffset && index < lst.Count) { // indexOffset < 0 !
+                    if (index >= -indexOffset && index < lst.Count) { // indexOffset < 0 !
                         lst[index] = lst[index + indexOffset];
                         lst[index + indexOffset] = trigger;
                     }
@@ -207,6 +211,15 @@ namespace StarcraftEPDTriggers.src.data {
                 if (!TriggerData[affected].Contains(trig)) {
                     TriggerData[affected].Add(trig);
                 }
+            }
+        }
+
+        public void set(TriggerCollection tc) {
+            this.AllTrigers.Clear();
+            this.AllTrigers.AddRange(tc.AllTrigers);
+            this.TriggerData.Clear();
+            foreach (KeyValuePair<PlayerDef, List<Trigger>> a in tc.TriggerData) {
+                this.TriggerData.Add(a.Key, a.Value);
             }
         }
     }

@@ -15,14 +15,14 @@ namespace StarcraftEPDTriggers.src {
             scanner.close();
         }
 
-        public bool parse() {
+        public bool parse(ref int lastReadPosition, ref int lastReadPositionEnd) {
             LocationDef.__setLocationsCountDoNotUseOutsideOfParser(256); // Safe keeping
-            return parse(false);
+            return parse(false, ref lastReadPosition, ref lastReadPositionEnd);
         }
 
-        public bool parse(bool onlyTriggers) {
+        public bool parse(bool onlyTriggers, ref int lastReadPosition, ref int lastReadPositionEnd) {
             allTriggers = new List<Trigger>();
-            return parseTokens(onlyTriggers);
+            return parseTokens(onlyTriggers, ref lastReadPosition, ref lastReadPositionEnd);
         }
 
         public List<Trigger> getTriggers() {
@@ -46,7 +46,7 @@ namespace StarcraftEPDTriggers.src {
         private bool parseStringTable() {
             Token qt = getNextToken();
             if (qt is CommandToken) {
-                CommandToken ct = (CommandToken)qt;
+                CommandToken ct = (CommandToken) qt;
                 if (ct.isStrings()) {
                     if (getNextToken() is LeftBracket) {
                         qt = getNextToken();
@@ -78,19 +78,19 @@ namespace StarcraftEPDTriggers.src {
         private bool parseExtendedStringTable() {
             Token qt = getNextToken();
             if (qt is CommandToken) {
-                CommandToken ct = (CommandToken)qt;
-                if(getNextToken() is LeftBracket) {
+                CommandToken ct = (CommandToken) qt;
+                if (getNextToken() is LeftBracket) {
                     if (ct.isExtendedStrings()) {
                         qt = getNextToken();
                         if (qt is NumToken) {
-                            int extendedStringsTableLength = ((NumToken)qt).toInt();
+                            int extendedStringsTableLength = ((NumToken) qt).toInt();
                             if (getNextToken() is RightBracket) {
                                 if (getNextToken() is Colon) {
                                     string[] extendedStringTable = new string[extendedStringsTableLength];
                                     for (int i = 0; i < extendedStringTable.Length; i++) {
                                         qt = getNextToken();
                                         if (qt is StringToken) {
-                                            extendedStringTable[i] = ((StringToken)qt).ToString();
+                                            extendedStringTable[i] = ((StringToken) qt).ToString();
                                         } else {
                                             throw new NotImplementedException();
                                         }
@@ -165,22 +165,22 @@ namespace StarcraftEPDTriggers.src {
         }
 
         private bool parseLocations() {
-            if(lastToken is CommandToken) {
-                CommandToken ct = (CommandToken)lastToken;
-                if (ct.isLocations()) { 
+            if (lastToken is CommandToken) {
+                CommandToken ct = (CommandToken) lastToken;
+                if (ct.isLocations()) {
                     if (getNextToken() is LeftBracket) {
-                    Token num = getNextToken();
+                        Token num = getNextToken();
                         if (num is NumToken && getNextToken() is RightBracket && getNextToken() is Colon) {
                             int locationsCount = num.toInt();
                             LocationDef.__setLocationsCountDoNotUseOutsideOfParser(locationsCount);
                             for (int i = 0; i < locationsCount; i++) {
                                 Token locName = getNextToken();
                                 if (locName is NumToken) { // Unnamed location
-                                    LocationDef.__setLocationNameDontUseOutsideOfParser(i, "Location " + ((NumToken)locName).toInt());
+                                    LocationDef.__setLocationNameDontUseOutsideOfParser(i, "Location " + ((NumToken) locName).toInt());
                                 } else if (locName is StringToken) {
-                                    LocationDef.__setLocationNameDontUseOutsideOfParser(i, ((StringToken)locName).toStringDef().ToString());
+                                    LocationDef.__setLocationNameDontUseOutsideOfParser(i, ((StringToken) locName).toStringDef().ToString());
                                 } else if (locName is CommandToken) {
-                                    if (((CommandToken)locName).isNoLocation()) {
+                                    if (((CommandToken) locName).isNoLocation()) {
                                         LocationDef.__setLocationNameDontUseOutsideOfParser(i, "No Location");
                                     } else {
                                         throw new NotImplementedException();
@@ -211,7 +211,7 @@ namespace StarcraftEPDTriggers.src {
                                     for (int i = 0; i < playersCount; i++) {
                                         Token playerName = getNextToken();
                                         if (playerName is StringToken) {
-                                            PlayerDef.__setPlayerNameDontUseOutsideOfParser(i, ((StringToken)playerName).toStringDef().ToString());
+                                            PlayerDef.__setPlayerNameDontUseOutsideOfParser(i, ((StringToken) playerName).toStringDef().ToString());
                                         } else {
                                             throw new NotImplementedException();
                                         }
@@ -240,7 +240,7 @@ namespace StarcraftEPDTriggers.src {
                                     for (int i = 0; i < switchesCount; i++) {
                                         Token switchName = getNextToken();
                                         if (switchName is StringToken) {
-                                            SwitchNameDef.__setSwitchNameDontUseOutsideOfParser(i, ((StringToken)switchName).toStringDef().ToString());
+                                            SwitchNameDef.__setSwitchNameDontUseOutsideOfParser(i, ((StringToken) switchName).toStringDef().ToString());
                                         } else {
                                             throw new NotImplementedException();
                                         }
@@ -256,7 +256,7 @@ namespace StarcraftEPDTriggers.src {
         }
 
         private bool parseUnitNames() {
-           Token t = getNextToken();
+            Token t = getNextToken();
             if (t is CommandToken) {
                 CommandToken ct = t as CommandToken;
                 if (ct.isUnits())
@@ -269,7 +269,7 @@ namespace StarcraftEPDTriggers.src {
                                     for (int i = 0; i < unitsCount; i++) {
                                         Token unitName = getNextToken();
                                         if (unitName is StringToken) {
-                                            UnitVanillaDef.__setUnitNameDontUseOutsideOfParser(i, ((StringToken)unitName).toStringDef().ToString());
+                                            UnitVanillaDef.__setUnitNameDontUseOutsideOfParser(i, ((StringToken) unitName).toStringDef().ToString());
                                         } else {
                                             throw new NotImplementedException();
                                         }
@@ -283,10 +283,29 @@ namespace StarcraftEPDTriggers.src {
             throw new NotImplementedException();
         }
 
-        private bool parseTokens(bool onlyTriggers) {
+        private void setLastTokenData(Token lastToken, ref int lastReadPosition, ref int lastReadPositionEnd) {
+            if (lastToken == null) {
+                lastReadPosition = 0;
+                lastReadPositionEnd = 0;
+            } else {
+                lastReadPosition = lastToken.getPosition();
+                lastReadPositionEnd = lastReadPosition + lastToken.getRawToken().Length;
+            }
+        }
+
+        private bool parseTokens(bool onlyTriggers, ref int lastReadPosition, ref int lastReadPositionEnd) {
             if (onlyTriggers) {
-                if (parseTriggers()) {
-                    return true;
+                try {
+                    if (parseTriggers()) {
+                        setLastTokenData(lastToken, ref lastReadPosition, ref lastReadPositionEnd);
+                        return true;
+                    } else {
+                        setLastTokenData(lastToken, ref lastReadPosition, ref lastReadPositionEnd);
+                        throw new NotImplementedException();
+                    }
+                } catch (NotImplementedException) {
+                    setLastTokenData(lastToken, ref lastReadPosition, ref lastReadPositionEnd);
+                    throw;
                 }
             } else {
                 if (parseStringTable()) {
@@ -296,6 +315,8 @@ namespace StarcraftEPDTriggers.src {
                                 if (parseUnitNames()) {
                                     if (parseSwitchNames()) {
                                         if (parsePlayerNames()) {
+                                            lastReadPosition = lastToken.getPosition();
+                                            lastReadPositionEnd = lastReadPosition + lastToken.getRawToken().Length;
                                             return true;
                                         }
                                     }
@@ -305,13 +326,15 @@ namespace StarcraftEPDTriggers.src {
                     }
                 }
             }
+            lastReadPosition = lastToken == null ? 0 : lastToken.getPosition();
+            lastReadPositionEnd = lastToken == null ? 0 : lastReadPosition + lastToken.getRawToken().Length;
             throw new NotImplementedException();
         }
 
         public Action parseOnlyAction() {
             Token t = getNextToken();
             bool enabled = true;
-            if(t is Semicolon) {
+            if (t is Semicolon) {
                 enabled = false;
                 t = getNextToken();
             }
@@ -326,7 +349,7 @@ namespace StarcraftEPDTriggers.src {
         public Condition parseOnlyCondition() {
             Token t = getNextToken();
             bool enabled = true;
-            if(t is Semicolon) {
+            if (t is Semicolon) {
                 enabled = false;
                 t = getNextToken();
             }
@@ -338,12 +361,12 @@ namespace StarcraftEPDTriggers.src {
             throw new NotImplementedException();
         }
 
-        class DummyParser : Parser{
+        class DummyParser : Parser {
 
             private Token[] _ret;
             private int ct = 0;
 
-            public DummyParser(Token[] toReturn):base(null) {
+            public DummyParser(Token[] toReturn) : base(null) {
                 _ret = toReturn;
             }
 
@@ -355,6 +378,7 @@ namespace StarcraftEPDTriggers.src {
         }
 
         private Condition GetCondition(CommandToken ct) {
+            int position = ct.getPosition();
             if (ct.isAccumulate()) {
                 return new ConditionAccumulate(this);
             } else if (ct.isAlways()) {
@@ -385,9 +409,9 @@ namespace StarcraftEPDTriggers.src {
                     int oid = amount.getIndex();
                     int addr = (uid * 12) + pid;
 
-                    ConditionMemory cm = new ConditionMemory(new DummyParser(new Token[] {new LeftBracket(), new NumToken(addr.ToString()), new Comma(), new CommandToken(q.ToString()), new Comma(), new NumToken(oid.ToString()), new RightBracket()}));
+                    ConditionMemory cm = new ConditionMemory(new DummyParser(new Token[] { new LeftBracket(position), new NumToken(addr.ToString(), position), new Comma(position), new CommandToken(q.ToString(), position), new Comma(position), new NumToken(oid.ToString(), position), new RightBracket(position) }));
                     EPDCondition cond = EPDCondition.get(cm);
-                    if(cond != null) {
+                    if (cond != null) {
                         return cond;
                     }
 
@@ -419,7 +443,7 @@ namespace StarcraftEPDTriggers.src {
                 return new ConditionScore(this);
             } else if (ct.isSwitch()) {
                 return new ConditionSwitch(this);
-            } else if(ct.isMemory()) {
+            } else if (ct.isMemory()) {
                 ConditionMemory cm = new ConditionMemory(this);
                 EPDCondition cond = EPDCondition.get(cm);
                 if (cond != null) {
@@ -532,7 +556,7 @@ namespace StarcraftEPDTriggers.src {
                 } else {
                     try {
                         return new ActionSetDeaths(rawDeaths);
-                    } catch(NotImplementedException) {
+                    } catch (NotImplementedException) {
                         return rawDeaths;
                     }
                     //return rawDeaths;
@@ -570,12 +594,12 @@ namespace StarcraftEPDTriggers.src {
         }
 
         private bool parseFlags() {
-            if(getNextToken() is Colon) {
+            if (getNextToken() is Colon) {
                 Token t = getNextToken();
-                if(t is NumToken) {
+                if (t is NumToken) {
                     int flags = t.toBinaryInt();
                     currentTrigger.setFlags(flags);
-                    if(getNextToken() is Semicolon) {
+                    if (getNextToken() is Semicolon) {
                         return true;
                     }
                 }
